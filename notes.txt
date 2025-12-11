@@ -1,0 +1,31 @@
+-> I want a simple UI to tell about my protoflio
+
+-> login/register account. 
+-> home page simple (pie chart of portofolio commodities)
+    -> commodition for now (US stockcs (ETF, or individual stocks), Gold, ID Stocks)
+-> add commodities
+
+class Commodities {
+    code:
+    price per share:
+    type:
+    fee:
+}
+
+class Investment extend Commodities {
+    quantity:
+    weight_type (gram for now):
+}
+
+class Gold extend Commodities {
+    shares:
+}
+
+-> for fees (I will count that as loss)
+-> so the total investment is the whole fee - the extra fee
+-> Once sold, earned money to liquid variable. 
+-> Realize: I will just make it per year since it is easier to maintain.
+-> Un realized: is the current (well this is if there is the API, include P/L too)
+
+------------
+might need some API to be dynamic but not a must
