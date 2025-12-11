@@ -27,5 +27,15 @@ class Gold extend Commodities {
 -> Realize: I will just make it per year since it is easier to maintain.
 -> Un realized: is the current (well this is if there is the API, include P/L too)
 
+OTHERS:
+-> settings: log out and profile managemement, and a note taking app could work too, i wanna maybe have my thought there.
+-> Update Sell or Buy: basically for updates >
+
 ------------
 might need some API to be dynamic but not a must
+
+color pallete:
+A8BBA3: pale green
+F7F4EA: off white
+EBD9D1: pink white
+B87C4C: pale brown
