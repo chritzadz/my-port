@@ -1,6 +1,6 @@
 -> I want a simple UI to tell about my protoflio
 
--> login/register account. 
+-> login/register account.
 -> home page simple (pie chart of portofolio commodities)
     -> commodition for now (US stockcs (ETF, or individual stocks), Gold, ID Stocks)
 -> add commodities
