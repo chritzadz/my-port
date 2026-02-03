@@ -6,11 +6,15 @@ import { ActivityIndicator, Text, View } from "react-native";
 interface InstrumentBoxProps {
   instrument: Instrument;
   index: number;
+  unrealizedPL: number;
+  setUnrealizedPL: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function InstrumentBox({
   instrument,
   index,
+  unrealizedPL,
+  setUnrealizedPL,
 }: InstrumentBoxProps) {
   const { loading, data, executeGetToday } = useGetToday(instrument.symbol);
 
@@ -26,6 +30,16 @@ export default function InstrumentBox({
   }, [executeGetToday, index]);
 
   const todayData = data?.today;
+
+  useEffect(() => {
+    if (todayData) {
+      const currentPL =
+        (Number(todayData.close) - Number(instrument.value)) *
+        Number(instrument.volume || 0);
+
+      setUnrealizedPL((prev) => prev + currentPL);
+    }
+  }, [todayData, instrument.value, instrument.volume, setUnrealizedPL]);
 
   return (
     <View className="flex-row justify-between items-center p-4 my-1 mx-2">
@@ -64,6 +78,21 @@ export default function InstrumentBox({
                 100
               ).toFixed(2)}
               %
+            </Text>
+            <Text
+              className={`text-xs font-medium ${
+                (Number(todayData.close) - Number(instrument.value)) *
+                  Number(instrument.volume || 0) >=
+                0
+                  ? "text-green-600"
+                  : "text-red-600"
+              }`}
+            >
+              {(
+                (Number(todayData.close) - Number(instrument.value)) *
+                Number(instrument.volume || 0)
+              ).toFixed(2)}
+              {"HKD"}
             </Text>
           </View>
         ) : (

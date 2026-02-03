@@ -28,13 +28,14 @@ export type Instrument = {
   open?: Maybe<Scalars['Float']['output']>;
   symbol: Scalars['String']['output'];
   value: Scalars['Float']['output'];
-  volume?: Maybe<Scalars['Int']['output']>;
+  volume?: Maybe<Scalars['Float']['output']>;
 };
 
 export type Query = {
   __typename?: 'Query';
   instruments: Array<Instrument>;
   today?: Maybe<StockData>;
+  totalAsset: TotalAsset;
 };
 
 
@@ -48,6 +49,11 @@ export type QueryTodayArgs = {
   symbol: Scalars['String']['input'];
 };
 
+
+export type QueryTotalAssetArgs = {
+  currency: Scalars['String']['input'];
+};
+
 export type StockData = {
   __typename?: 'StockData';
   close: Scalars['Float']['output'];
@@ -58,4 +64,11 @@ export type StockData = {
   open: Scalars['Float']['output'];
   symbol: Scalars['String']['output'];
   volume: Scalars['Int']['output'];
+};
+
+export type TotalAsset = {
+  __typename?: 'TotalAsset';
+  currency: Scalars['String']['output'];
+  totalValue: Scalars['Float']['output'];
+  transactionCount: Scalars['Int']['output'];
 };

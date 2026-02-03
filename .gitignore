@@ -3,6 +3,12 @@
 # dependencies
 node_modules/
 
+# Environment variables
+.env*
+config/env.ts
+codegen.ts
+codegen.yml
+
 # Expo
 .expo/
 dist/

@@ -2,15 +2,23 @@ import PortfolioPieChart from "@/components/portfolio-pie-chart-new";
 import InstrumentBox from "@/components/ui/instrument-box";
 import GeneralView from "@/components/view/general-view";
 import { useGetInstruments } from "@/hooks/use-instruments";
-import { useEffect } from "react";
+import { useGetTotalAsset } from "@/hooks/use-total-asset";
+import { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 
 export default function HomeScreen() {
   const { loading, error, executeGetInstruments, data } = useGetInstruments();
+  const {
+    loading: totalAssetLoading,
+    data: totalAssetData,
+    executeGetTotalAsset,
+  } = useGetTotalAsset("HKD");
+  const [unrealizedPL, setUnrealizedPL] = useState<number>(0);
 
   useEffect(() => {
     executeGetInstruments();
-  }, [executeGetInstruments]);
+    executeGetTotalAsset();
+  }, [executeGetInstruments, executeGetTotalAsset]);
 
   if (loading) {
     return (
@@ -44,10 +52,48 @@ export default function HomeScreen() {
   }
 
   return (
-    <GeneralView title={"MyPort"}>
+    <GeneralView title={"MyPort"} scrollable={true}>
       {/* Pie Chart */}
       <View className="p-5">
         <PortfolioPieChart data={data.instruments} />
+      </View>
+
+      {/* Total Asset Summary */}
+      <View className="px-5 pb-3">
+        {totalAssetLoading ? (
+          <ActivityIndicator size="small" />
+        ) : totalAssetData?.totalAsset ? (
+          <View className="bg-gray-50 p-4 rounded-lg">
+            <Text className="text-lg font-bold text-gray-900 mb-2">
+              Portfolio Summary
+            </Text>
+            <View className="flex-row justify-between">
+              <Text className="text-base text-gray-600">Total Value:</Text>
+              <Text className="text-base font-semibold text-gray-900">
+                {totalAssetData.totalAsset.currency} $
+                {Number(totalAssetData.totalAsset.totalValue).toFixed(2)}
+              </Text>
+            </View>
+            <View className="flex-row justify-between mt-1">
+              <Text className="text-base text-gray-600">Transactions:</Text>
+              <Text className="text-base font-semibold text-gray-900">
+                {totalAssetData.totalAsset.transactionCount}
+              </Text>
+            </View>
+            <View className="flex-row justify-between mt-1">
+              <Text className="text-base text-gray-600">Unrealized P&L:</Text>
+              <Text
+                className={`text-base font-semibold ${
+                  unrealizedPL >= 0 ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {unrealizedPL >= 0 ? "+" : ""}HKD ${unrealizedPL.toFixed(2)}
+              </Text>
+            </View>
+          </View>
+        ) : (
+          <Text className="text-gray-500 text-center">No asset data</Text>
+        )}
       </View>
 
       {/* List of instruments */}
@@ -57,7 +103,12 @@ export default function HomeScreen() {
           keyExtractor={(item) => item.symbol}
           scrollEnabled={false}
           renderItem={({ item, index }) => (
-            <InstrumentBox instrument={item} index={index} />
+            <InstrumentBox
+              instrument={item}
+              index={index}
+              unrealizedPL={unrealizedPL}
+              setUnrealizedPL={setUnrealizedPL}
+            />
           )}
         />
       </View>
