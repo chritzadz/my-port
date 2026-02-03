@@ -1,4 +1,3 @@
-schema: "https://my-port-backend.netlify.app/api/graphql"
 documents:
   - "./queries/**/*.{ts,tsx}"
   - "./app/**/*.{ts,tsx}"
