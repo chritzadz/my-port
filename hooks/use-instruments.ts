@@ -7,10 +7,19 @@ export interface InstrumentsResult {
 }
 
 const INSTRUMENTS_QUERY = gql`
-  query Instruments {
-    instruments {
+  query Instruments($currency: String!) {
+    instruments(currency: $currency) {
       symbol
       value
+      currentPrice
+      dailyChange
+      dailyChangePercent
+      open
+      high
+      low
+      volume
+      lastRefreshed
+      hasCurrentData
     }
   }
 `;
@@ -21,7 +30,9 @@ export const useGetInstruments = () => {
 
   const executeGetInstruments = async (): Promise<Instrument[] | null> => {
     try {
-      const result = await fetchInstruments();
+      const result = await fetchInstruments({
+        variables: { currency: "HKD" },
+      });
       if (result.data) {
         return result.data.instruments;
       } else {

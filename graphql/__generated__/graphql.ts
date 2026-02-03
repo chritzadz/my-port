@@ -17,11 +17,45 @@ export type Scalars = {
 
 export type Instrument = {
   __typename?: 'Instrument';
+  currentPrice?: Maybe<Scalars['Float']['output']>;
+  dailyChange?: Maybe<Scalars['Float']['output']>;
+  dailyChangePercent?: Maybe<Scalars['Float']['output']>;
+  hasCurrentData: Scalars['Boolean']['output'];
+  high?: Maybe<Scalars['Float']['output']>;
+  instrumentType?: Maybe<Scalars['String']['output']>;
+  lastRefreshed?: Maybe<Scalars['String']['output']>;
+  low?: Maybe<Scalars['Float']['output']>;
+  open?: Maybe<Scalars['Float']['output']>;
   symbol: Scalars['String']['output'];
   value: Scalars['Float']['output'];
+  volume?: Maybe<Scalars['Int']['output']>;
 };
 
 export type Query = {
   __typename?: 'Query';
   instruments: Array<Instrument>;
+  today?: Maybe<StockData>;
+};
+
+
+export type QueryInstrumentsArgs = {
+  currency?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryTodayArgs = {
+  currency?: InputMaybe<Scalars['String']['input']>;
+  symbol: Scalars['String']['input'];
+};
+
+export type StockData = {
+  __typename?: 'StockData';
+  close: Scalars['Float']['output'];
+  date: Scalars['String']['output'];
+  high: Scalars['Float']['output'];
+  lastRefreshed: Scalars['String']['output'];
+  low: Scalars['Float']['output'];
+  open: Scalars['Float']['output'];
+  symbol: Scalars['String']['output'];
+  volume: Scalars['Int']['output'];
 };
