@@ -1,17 +1,20 @@
+import { useGetCurrencies } from "@/hooks/use-currencies";
 import {
   UpdateInitialCapitalInput,
   useUpdateInitialCapital,
 } from "@/hooks/use-transaction";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Alert,
   Modal,
   ScrollView,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { ComboboxOption } from "./combobox";
+import CurrencyCombobox from "./currency-combobox";
+import FormInput from "./form-input";
 
 interface UpdateInitialCapitalModalProps {
   visible: boolean;
@@ -25,10 +28,38 @@ export default function UpdateInitialCapitalModal({
   onSuccess,
 }: UpdateInitialCapitalModalProps) {
   const { executeUpdateInitialCapital, loading } = useUpdateInitialCapital();
+  const { executeGetCurrencies, loading: currenciesLoading } =
+    useGetCurrencies();
+  const [currencyOptions, setCurrencyOptions] = useState<ComboboxOption[]>([]);
   const [formData, setFormData] = useState<UpdateInitialCapitalInput>({
     total: 0,
     currency: "USD",
   });
+
+  useEffect(() => {
+    const loadCurrencies = async () => {
+      try {
+        const currencies = await executeGetCurrencies();
+        if (currencies) {
+          const options = currencies.map((currency) => ({
+            value: currency.code,
+            label: currency.code,
+          }));
+          setCurrencyOptions(options);
+        }
+      } catch (err) {
+        console.error("Failed to load currencies:", err);
+        // Fallback options
+        setCurrencyOptions([
+          { value: "USD", label: "USD" },
+          { value: "EUR", label: "EUR" },
+          { value: "GBP", label: "GBP" },
+          { value: "HKD", label: "HKD" },
+        ]);
+      }
+    };
+    loadCurrencies();
+  }, [executeGetCurrencies]);
 
   const resetForm = () => {
     setFormData({
@@ -59,7 +90,7 @@ export default function UpdateInitialCapitalModal({
         Alert.alert("Error", result.message);
       }
     } catch (err) {
-      Alert.alert("Error", "Failed to update initial capital");
+      Alert.alert("Error", "Failed to update initial capital: " + err);
     }
   };
 
@@ -94,18 +125,15 @@ export default function UpdateInitialCapitalModal({
         <ScrollView className="flex-1 p-4">
           <View className="space-y-6">
             <View>
-              <Text className="text-gray-700 font-medium mb-2 text-lg">
-                Initial Capital Amount *
-              </Text>
-              <TextInput
-                className="border border-gray-300 rounded-lg px-4 py-3 bg-white text-lg"
+              <FormInput
+                label="Initial Capital Amount"
                 value={formData.total.toString()}
-                onChangeText={(text) =>
+                onChangeText={(text: string) =>
                   setFormData({ ...formData, total: parseFloat(text) || 0 })
                 }
                 placeholder="0.00"
+                required
                 keyboardType="numeric"
-                autoFocus
               />
               <Text className="text-gray-500 text-sm mt-1">
                 Enter your starting investment amount
@@ -113,18 +141,18 @@ export default function UpdateInitialCapitalModal({
             </View>
 
             <View>
-              <Text className="text-gray-700 font-medium mb-2 text-lg">
-                Currency *
+              <Text className="text-gray-700 font-medium mb-2 text-md">
+                Currency*
               </Text>
-              <TextInput
-                className="border border-gray-300 rounded-lg px-4 py-3 bg-white text-lg"
+              <CurrencyCombobox
+                options={currencyOptions}
                 value={formData.currency}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, currency: text.toUpperCase() })
+                onValueChange={(value: string) =>
+                  setFormData({ ...formData, currency: value })
                 }
                 placeholder="USD"
-                autoCapitalize="characters"
-                maxLength={3}
+                loading={currenciesLoading}
+                allowCustomValue={true}
               />
               <Text className="text-gray-500 text-sm mt-1">
                 Enter the currency code (e.g., USD, EUR, GBP)
@@ -142,8 +170,7 @@ export default function UpdateInitialCapitalModal({
 
             <View className="mt-4 p-3 bg-yellow-50 rounded-lg">
               <Text className="text-sm text-yellow-800">
-                ⚠️ This will update your portfolio's initial capital amount.
-                Make sure this reflects your actual starting investment.
+                {`⚠️This will update your portfolio's initial capital amount. Make sure this reflects your actual investment made.`}
               </Text>
             </View>
           </View>

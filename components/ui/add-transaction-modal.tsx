@@ -2,17 +2,20 @@ import {
   AddTransactionInput,
   TransactionType,
 } from "@/graphql/__generated__/graphql";
+import { useGetCurrencies } from "@/hooks/use-currencies";
 import { useAddTransaction } from "@/hooks/use-transaction";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Alert,
   Modal,
   ScrollView,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { ComboboxOption } from "./combobox";
+import CurrencyCombobox from "./currency-combobox";
+import FormInput from "./form-input";
 
 interface AddTransactionModalProps {
   visible: boolean;
@@ -26,6 +29,9 @@ export default function AddTransactionModal({
   onSuccess,
 }: AddTransactionModalProps) {
   const { executeAddTransaction, loading } = useAddTransaction();
+  const { executeGetCurrencies, loading: currenciesLoading } =
+    useGetCurrencies();
+  const [currencyOptions, setCurrencyOptions] = useState<ComboboxOption[]>([]);
   const [formData, setFormData] = useState<AddTransactionInput>({
     instrumentSymbol: "",
     instrumentType: "",
@@ -35,6 +41,31 @@ export default function AddTransactionModal({
     currency: "USD",
     transactionDate: new Date().toISOString().split("T")[0],
   });
+
+  useEffect(() => {
+    const loadCurrencies = async () => {
+      try {
+        const currencies = await executeGetCurrencies();
+        if (currencies) {
+          const options = currencies.map((currency) => ({
+            value: currency.code,
+            label: currency.code,
+          }));
+          setCurrencyOptions(options);
+        }
+      } catch (err) {
+        console.error("Failed to load currencies:", err);
+        // Fallback options
+        setCurrencyOptions([
+          { value: "USD", label: "USD" },
+          { value: "EUR", label: "EUR" },
+          { value: "GBP", label: "GBP" },
+          { value: "HKD", label: "HKD" },
+        ]);
+      }
+    };
+    loadCurrencies();
+  }, [executeGetCurrencies]);
 
   const resetForm = () => {
     setFormData({
@@ -102,134 +133,119 @@ export default function AddTransactionModal({
 
         <ScrollView className="flex-1 p-4">
           <View className="space-y-4">
-            <View>
-              <Text className="text-gray-700 font-medium mb-2">Symbol *</Text>
-              <TextInput
-                className="border border-gray-300 rounded-lg px-3 py-2 bg-white"
-                value={formData.instrumentSymbol}
-                onChangeText={(text) =>
-                  setFormData({
-                    ...formData,
-                    instrumentSymbol: text.toUpperCase(),
-                  })
-                }
-                placeholder="e.g., AAPL"
-                autoCapitalize="characters"
-              />
-            </View>
+            <FormInput
+              className="my-2"
+              label="Symbol"
+              value={formData.instrumentSymbol}
+              onChangeText={(text: string) =>
+                setFormData({
+                  ...formData,
+                  instrumentSymbol: text.toUpperCase(),
+                })
+              }
+              placeholder="e.g., AAPL"
+              required
+              autoCapitalize="characters"
+            />
 
-            <View>
-              <Text className="text-gray-700 font-medium mb-2">
-                Instrument Type *
-              </Text>
-              <TextInput
-                className="border border-gray-300 rounded-lg px-3 py-2 bg-white"
-                value={formData.instrumentType}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, instrumentType: text })
-                }
-                placeholder="e.g., Stock, Bond, ETF"
-              />
-            </View>
+            <FormInput
+              className="my-2"
+              label="Instrument Type"
+              value={formData.instrumentType}
+              onChangeText={(text: string) =>
+                setFormData({ ...formData, instrumentType: text })
+              }
+              placeholder="e.g., Stock, Bond, ETF"
+              required
+            />
 
             <View>
               <Text className="text-gray-700 font-medium mb-2">
                 Transaction Type
               </Text>
-              <View className="flex-row space-x-2">
-                <TouchableOpacity
-                  className={`flex-1 py-2 px-4 rounded-lg border ${
-                    formData.type === TransactionType.Buy
-                      ? "bg-green-500 border-green-500"
-                      : "bg-gray-200 border-gray-300"
-                  }`}
-                  onPress={() =>
-                    setFormData({ ...formData, type: TransactionType.Buy })
-                  }
-                >
-                  <Text
-                    className={`text-center font-medium ${
+              <View className="flex-row space-x-2 gap-2">
+                <View className="w-1/2">
+                  <TouchableOpacity
+                    className={`flex-1 py-2 px-4 rounded-lg border ${
                       formData.type === TransactionType.Buy
-                        ? "text-white"
-                        : "text-gray-700"
+                        ? "bg-green-500 border-green-500"
+                        : "bg-gray-200 border-gray-300"
                     }`}
+                    onPress={() =>
+                      setFormData({ ...formData, type: TransactionType.Buy })
+                    }
                   >
-                    BUY
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  className={`flex-1 py-2 px-4 rounded-lg border ${
-                    formData.type === TransactionType.Sell
-                      ? "bg-red-500 border-red-500"
-                      : "bg-gray-200 border-gray-300"
-                  }`}
-                  onPress={() =>
-                    setFormData({ ...formData, type: TransactionType.Sell })
-                  }
-                >
-                  <Text
-                    className={`text-center font-medium ${
+                    <Text
+                      className={`text-center font-medium ${
+                        formData.type === TransactionType.Buy
+                          ? "text-white"
+                          : "text-gray-700"
+                      }`}
+                    >
+                      BUY
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View className="w-1/2">
+                  <TouchableOpacity
+                    className={`flex-1 py-2 px-4 rounded-lg border ${
                       formData.type === TransactionType.Sell
-                        ? "text-white"
-                        : "text-gray-700"
+                        ? "bg-red-500 border-red-500"
+                        : "bg-gray-200 border-gray-300"
                     }`}
+                    onPress={() =>
+                      setFormData({ ...formData, type: TransactionType.Sell })
+                    }
                   >
-                    SELL
-                  </Text>
-                </TouchableOpacity>
+                    <Text
+                      className={`text-center font-medium ${
+                        formData.type === TransactionType.Sell
+                          ? "text-white"
+                          : "text-gray-700"
+                      }`}
+                    >
+                      SELL
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
 
-            <View>
-              <Text className="text-gray-700 font-medium mb-2">Quantity *</Text>
-              <TextInput
-                className="border border-gray-300 rounded-lg px-3 py-2 bg-white"
-                value={formData.quantity.toString()}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, quantity: parseFloat(text) || 0 })
-                }
-                placeholder="0"
-                keyboardType="numeric"
-              />
-            </View>
+            <FormInput
+              className="my-2"
+              label="Quantity"
+              value={formData.quantity.toString()}
+              onChangeText={(text: string) =>
+                setFormData({ ...formData, quantity: parseFloat(text) || 0 })
+              }
+              placeholder="0"
+              required
+              keyboardType="numeric"
+            />
 
-            <View>
-              <Text className="text-gray-700 font-medium mb-2">Price *</Text>
-              <TextInput
-                className="border border-gray-300 rounded-lg px-3 py-2 bg-white"
-                value={formData.price.toString()}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, price: parseFloat(text) || 0 })
-                }
-                placeholder="0.00"
-                keyboardType="numeric"
-              />
-            </View>
+            <FormInput
+              className="my-2"
+              label="Price"
+              value={formData.price.toString()}
+              onChangeText={(text: string) =>
+                setFormData({ ...formData, price: parseFloat(text) || 0 })
+              }
+              placeholder="0.00"
+              required
+              keyboardType="numeric"
+            />
 
             <View>
               <Text className="text-gray-700 font-medium mb-2">Currency</Text>
-              <TextInput
-                className="border border-gray-300 rounded-lg px-3 py-2 bg-white"
+              <CurrencyCombobox
+                options={currencyOptions}
                 value={formData.currency}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, currency: text.toUpperCase() })
+                onValueChange={(value: string) =>
+                  setFormData({ ...formData, currency: value })
                 }
                 placeholder="USD"
-                autoCapitalize="characters"
-              />
-            </View>
-
-            <View>
-              <Text className="text-gray-700 font-medium mb-2">
-                Transaction Date
-              </Text>
-              <TextInput
-                className="border border-gray-300 rounded-lg px-3 py-2 bg-white"
-                value={formData.transactionDate || ""}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, transactionDate: text })
-                }
-                placeholder="YYYY-MM-DD"
+                loading={currenciesLoading}
+                allowCustomValue={true}
               />
             </View>
 

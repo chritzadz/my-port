@@ -32,6 +32,11 @@ export type AddTransactionResult = {
   transaction?: Maybe<Transaction>;
 };
 
+export type Currency = {
+  __typename?: 'Currency';
+  code: Scalars['String']['output'];
+};
+
 export type Instrument = {
   __typename?: 'Instrument';
   currentPrice?: Maybe<Scalars['Float']['output']>;
@@ -51,6 +56,7 @@ export type Instrument = {
 export type Mutation = {
   __typename?: 'Mutation';
   addTransaction: AddTransactionResult;
+  updateInitialCapital: UpdateInitialCapitalResult;
 };
 
 
@@ -58,8 +64,14 @@ export type MutationAddTransactionArgs = {
   input: AddTransactionInput;
 };
 
+
+export type MutationUpdateInitialCapitalArgs = {
+  input: UpdateInitialCapitalInput;
+};
+
 export type Query = {
   __typename?: 'Query';
+  currencies: Array<Currency>;
   instruments: Array<Instrument>;
   today?: Maybe<StockData>;
   totalAsset: TotalAsset;
@@ -102,6 +114,7 @@ export type StockData = {
 export type TotalAsset = {
   __typename?: 'TotalAsset';
   currency: Scalars['String']['output'];
+  liquidCash: Scalars['Float']['output'];
   totalPnl: Scalars['Float']['output'];
   totalRealizedPnl: Scalars['Float']['output'];
   totalUnrealizedPnl: Scalars['Float']['output'];
@@ -126,3 +139,16 @@ export enum TransactionType {
   Buy = 'BUY',
   Sell = 'SELL'
 }
+
+export type UpdateInitialCapitalInput = {
+  currency: Scalars['String']['input'];
+  total: Scalars['Float']['input'];
+};
+
+export type UpdateInitialCapitalResult = {
+  __typename?: 'UpdateInitialCapitalResult';
+  currency?: Maybe<Scalars['String']['output']>;
+  message: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
+  total?: Maybe<Scalars['Float']['output']>;
+};
