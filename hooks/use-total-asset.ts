@@ -8,6 +8,9 @@ const GET_TOTAL_ASSET = gql`
       totalValue
       currency
       transactionCount
+      totalRealizedPnl
+      totalUnrealizedPnl
+      totalPnl
     }
   }
 `;
@@ -16,6 +19,9 @@ export type TotalAssetData = {
   totalValue: number;
   currency: string;
   transactionCount: number;
+  totalRealizedPnl: number;
+  totalUnrealizedPnl: number;
+  totalPnl: number;
 };
 
 export type TotalAssetResult = {

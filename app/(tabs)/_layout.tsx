@@ -69,9 +69,9 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="transaction-list"
         options={{
-          title: "Explore",
+          title: "Transaction",
           tabBarIcon: ({ color, focused }) => (
             <View
               className={classNames(

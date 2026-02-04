@@ -3,7 +3,7 @@ import InstrumentBox from "@/components/ui/instrument-box";
 import GeneralView from "@/components/view/general-view";
 import { useGetInstruments } from "@/hooks/use-instruments";
 import { useGetTotalAsset } from "@/hooks/use-total-asset";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 
 export default function HomeScreen() {
@@ -13,7 +13,6 @@ export default function HomeScreen() {
     data: totalAssetData,
     executeGetTotalAsset,
   } = useGetTotalAsset("HKD");
-  const [unrealizedPL, setUnrealizedPL] = useState<number>(0);
 
   useEffect(() => {
     executeGetInstruments();
@@ -75,19 +74,53 @@ export default function HomeScreen() {
               </Text>
             </View>
             <View className="flex-row justify-between mt-1">
-              <Text className="text-base text-gray-600">Transactions:</Text>
+              <Text className="text-base text-gray-600">Number of Equity:</Text>
               <Text className="text-base font-semibold text-gray-900">
                 {totalAssetData.totalAsset.transactionCount}
+              </Text>
+            </View>
+            <View className="flex-row justify-between mt-1">
+              <Text className="text-base text-gray-600">Total P&L:</Text>
+              <Text
+                className={`text-base font-semibold ${
+                  totalAssetData.totalAsset.totalPnl >= 0
+                    ? "text-green-600"
+                    : "text-red-600"
+                }`}
+              >
+                {totalAssetData.totalAsset.totalPnl >= 0 ? "+" : ""}
+                {totalAssetData.totalAsset.currency} $
+                {Number(totalAssetData.totalAsset.totalPnl).toFixed(2)}
+              </Text>
+            </View>
+            <View className="flex-row justify-between mt-1">
+              <Text className="text-base text-gray-600">Realized P&L:</Text>
+              <Text
+                className={`text-base font-semibold ${
+                  totalAssetData.totalAsset.totalRealizedPnl >= 0
+                    ? "text-green-600"
+                    : "text-red-600"
+                }`}
+              >
+                {totalAssetData.totalAsset.totalRealizedPnl >= 0 ? "+" : ""}
+                {totalAssetData.totalAsset.currency} $
+                {Number(totalAssetData.totalAsset.totalRealizedPnl).toFixed(2)}
               </Text>
             </View>
             <View className="flex-row justify-between mt-1">
               <Text className="text-base text-gray-600">Unrealized P&L:</Text>
               <Text
                 className={`text-base font-semibold ${
-                  unrealizedPL >= 0 ? "text-green-600" : "text-red-600"
+                  totalAssetData.totalAsset.totalUnrealizedPnl >= 0
+                    ? "text-green-600"
+                    : "text-red-600"
                 }`}
               >
-                {unrealizedPL >= 0 ? "+" : ""}HKD ${unrealizedPL.toFixed(2)}
+                {totalAssetData.totalAsset.totalUnrealizedPnl >= 0 ? "+" : ""}
+                {totalAssetData.totalAsset.currency} $
+                {Number(totalAssetData.totalAsset.totalUnrealizedPnl).toFixed(
+                  2,
+                )}
               </Text>
             </View>
           </View>
@@ -103,12 +136,7 @@ export default function HomeScreen() {
           keyExtractor={(item) => item.symbol}
           scrollEnabled={false}
           renderItem={({ item, index }) => (
-            <InstrumentBox
-              instrument={item}
-              index={index}
-              unrealizedPL={unrealizedPL}
-              setUnrealizedPL={setUnrealizedPL}
-            />
+            <InstrumentBox instrument={item} index={index} />
           )}
         />
       </View>

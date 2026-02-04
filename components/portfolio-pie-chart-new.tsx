@@ -1,6 +1,6 @@
 import { Instrument } from "@/graphql/__generated__/graphql";
 import React from "react";
-import { Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import PieChart from "react-native-pie-chart";
 
 type Slice = {
@@ -37,8 +37,54 @@ export default function PortfolioPieChart({ data }: { data: Instrument[] }) {
   }));
 
   return (
-    <View style={{ alignItems: "center" }}>
+    <ScrollView contentContainerStyle={{ alignItems: "center", padding: 16 }}>
       <PieChart widthAndHeight={widthAndHeight} series={series} />
-    </View>
+
+      {/* Legend */}
+      <View style={{ marginTop: 20, width: "100%" }}>
+        <Text
+          style={{
+            fontSize: 16,
+            fontWeight: "bold",
+            marginBottom: 12,
+            textAlign: "center",
+          }}
+        >
+          Portfolio Breakdown
+        </Text>
+        {data.map((item, index) => {
+          const percentage = (
+            (Number(item.value) /
+              series.reduce((sum, slice) => sum + slice.value, 0)) *
+            100
+          ).toFixed(1);
+          return (
+            <View
+              key={item.symbol}
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginBottom: 8,
+                paddingHorizontal: 16,
+              }}
+            >
+              <View
+                style={{
+                  width: 16,
+                  height: 16,
+                  backgroundColor: colors[index % colors.length],
+                  marginRight: 12,
+                  borderRadius: 8,
+                }}
+              />
+              <Text style={{ flex: 1, fontSize: 14 }}>{item.symbol}</Text>
+              <Text style={{ fontSize: 14, fontWeight: "500" }}>
+                {percentage}%
+              </Text>
+            </View>
+          );
+        })}
+      </View>
+    </ScrollView>
   );
 }

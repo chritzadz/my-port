@@ -15,6 +15,23 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type AddTransactionInput = {
+  currency: Scalars['String']['input'];
+  instrumentSymbol: Scalars['String']['input'];
+  instrumentType: Scalars['String']['input'];
+  price: Scalars['Float']['input'];
+  quantity: Scalars['Float']['input'];
+  transactionDate?: InputMaybe<Scalars['String']['input']>;
+  type: TransactionType;
+};
+
+export type AddTransactionResult = {
+  __typename?: 'AddTransactionResult';
+  message: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
+  transaction?: Maybe<Transaction>;
+};
+
 export type Instrument = {
   __typename?: 'Instrument';
   currentPrice?: Maybe<Scalars['Float']['output']>;
@@ -31,11 +48,22 @@ export type Instrument = {
   volume?: Maybe<Scalars['Float']['output']>;
 };
 
+export type Mutation = {
+  __typename?: 'Mutation';
+  addTransaction: AddTransactionResult;
+};
+
+
+export type MutationAddTransactionArgs = {
+  input: AddTransactionInput;
+};
+
 export type Query = {
   __typename?: 'Query';
   instruments: Array<Instrument>;
   today?: Maybe<StockData>;
   totalAsset: TotalAsset;
+  transactions: Array<Transaction>;
 };
 
 
@@ -54,6 +82,11 @@ export type QueryTotalAssetArgs = {
   currency: Scalars['String']['input'];
 };
 
+
+export type QueryTransactionsArgs = {
+  symbol?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type StockData = {
   __typename?: 'StockData';
   close: Scalars['Float']['output'];
@@ -69,6 +102,27 @@ export type StockData = {
 export type TotalAsset = {
   __typename?: 'TotalAsset';
   currency: Scalars['String']['output'];
+  totalPnl: Scalars['Float']['output'];
+  totalRealizedPnl: Scalars['Float']['output'];
+  totalUnrealizedPnl: Scalars['Float']['output'];
   totalValue: Scalars['Float']['output'];
   transactionCount: Scalars['Int']['output'];
 };
+
+export type Transaction = {
+  __typename?: 'Transaction';
+  createdAt: Scalars['String']['output'];
+  currency: Scalars['String']['output'];
+  id: Scalars['Int']['output'];
+  instrumentSymbol: Scalars['String']['output'];
+  instrumentType: Scalars['String']['output'];
+  price: Scalars['Float']['output'];
+  quantity: Scalars['Float']['output'];
+  transactionDate: Scalars['String']['output'];
+  type: TransactionType;
+};
+
+export enum TransactionType {
+  Buy = 'BUY',
+  Sell = 'SELL'
+}
