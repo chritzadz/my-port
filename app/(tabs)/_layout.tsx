@@ -84,6 +84,23 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="daily-expense"
+        options={{
+          title: "Daily Expense",
+          tabBarIcon: ({ color, focused }) => (
+            <View
+              className={classNames(
+                "items-center justify-center w-12 h-12 rounded-full",
+                { "bg-pale-green": focused },
+              )}
+            >
+              {/* You can replace this with a more appropriate icon */}
+              <Compass color={focused ? "white" : "white"} size={24} />
+            </View>
+          ),
+        }}
+      />
     </Tabs>
   );
 }

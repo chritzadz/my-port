@@ -15,6 +15,20 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type AddExpenseInput = {
+  currency: Scalars['String']['input'];
+  date: Scalars['String']['input'];
+  expense: Scalars['Float']['input'];
+  item: Scalars['String']['input'];
+};
+
+export type AddExpenseResult = {
+  __typename?: 'AddExpenseResult';
+  expense?: Maybe<DailyExpense>;
+  message?: Maybe<Scalars['String']['output']>;
+  success?: Maybe<Scalars['Boolean']['output']>;
+};
+
 export type AddTransactionInput = {
   currency: Scalars['String']['input'];
   instrumentSymbol: Scalars['String']['input'];
@@ -37,6 +51,15 @@ export type Currency = {
   code: Scalars['String']['output'];
 };
 
+export type DailyExpense = {
+  __typename?: 'DailyExpense';
+  currency: Scalars['String']['output'];
+  date: Scalars['String']['output'];
+  expense: Scalars['Float']['output'];
+  id: Scalars['ID']['output'];
+  item: Scalars['String']['output'];
+};
+
 export type Instrument = {
   __typename?: 'Instrument';
   currentPrice?: Maybe<Scalars['Float']['output']>;
@@ -55,8 +78,17 @@ export type Instrument = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addExpense: AddExpenseResult;
   addTransaction: AddTransactionResult;
   updateInitialCapital: UpdateInitialCapitalResult;
+};
+
+
+export type MutationAddExpenseArgs = {
+  currency: Scalars['String']['input'];
+  date: Scalars['String']['input'];
+  expense: Scalars['Float']['input'];
+  item: Scalars['String']['input'];
 };
 
 
@@ -72,10 +104,18 @@ export type MutationUpdateInitialCapitalArgs = {
 export type Query = {
   __typename?: 'Query';
   currencies: Array<Currency>;
+  expenses: Array<DailyExpense>;
+  expensesByDateRange: Array<DailyExpense>;
   instruments: Array<Instrument>;
   today?: Maybe<StockData>;
   totalAsset: TotalAsset;
   transactions: Array<Transaction>;
+};
+
+
+export type QueryExpensesByDateRangeArgs = {
+  from: Scalars['String']['input'];
+  to: Scalars['String']['input'];
 };
 
 
