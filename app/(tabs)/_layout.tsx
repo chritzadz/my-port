@@ -5,7 +5,7 @@ import { Pressable, View } from "react-native";
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import classNames from "classnames";
-import { Compass, Home } from "lucide-react-native";
+import { Compass, Home, Wallet } from "lucide-react-native";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -95,8 +95,7 @@ export default function TabLayout() {
                 { "bg-pale-green": focused },
               )}
             >
-              {/* You can replace this with a more appropriate icon */}
-              <Compass color={focused ? "white" : "white"} size={24} />
+              <Wallet color={focused ? "white" : "white"} size={24} />
             </View>
           ),
         }}

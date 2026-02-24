@@ -31,11 +31,11 @@ export default function TransactionBox({ transaction }: TransactionBoxProps) {
 
   return (
     <TouchableOpacity
-      className="bg-white rounded-lg p-4 mb-3 shadow-sm border border-gray-200"
+      className="bg-pale-brown rounded-lg p-4 mb-3 shadow-sm border border-gray-200"
       onPress={handlePress}
     >
       <View className="flex-row justify-between items-center mb-2">
-        <Text className="font-bold text-lg">
+        <Text className="font-bold text-lg text-off-white">
           {transaction.instrumentSymbol}
         </Text>
         <Text
@@ -46,20 +46,22 @@ export default function TransactionBox({ transaction }: TransactionBoxProps) {
       </View>
 
       <View className="flex-row justify-between items-center mb-1">
-        <Text className="text-gray-600">Quantity:</Text>
-        <Text className="font-medium">{transaction.quantity}</Text>
+        <Text className="text-off-white">Quantity:</Text>
+        <Text className="font-medium text-off-white">
+          {transaction.quantity}
+        </Text>
       </View>
 
       <View className="flex-row justify-between items-center mb-1">
-        <Text className="text-gray-600">Price:</Text>
-        <Text className="font-medium">
+        <Text className="text-off-white">Price:</Text>
+        <Text className="font-medium text-off-white">
           {formatCurrency(transaction.price, transaction.currency)}
         </Text>
       </View>
 
       <View className="flex-row justify-between items-center mb-1">
-        <Text className="text-gray-600">Total:</Text>
-        <Text className="font-medium">
+        <Text className="text-off-white ">Total:</Text>
+        <Text className="font-medium text-off-white">
           {formatCurrency(
             transaction.price * transaction.quantity,
             transaction.currency,
@@ -68,13 +70,15 @@ export default function TransactionBox({ transaction }: TransactionBoxProps) {
       </View>
 
       <View className="flex-row justify-between items-center mb-1">
-        <Text className="text-gray-600">Type:</Text>
-        <Text className="text-sm">{transaction.instrumentType}</Text>
+        <Text className="text-off-white">Type:</Text>
+        <Text className="text-sm text-off-white">
+          {transaction.instrumentType}
+        </Text>
       </View>
 
       <View className="flex-row justify-between items-center">
-        <Text className="text-gray-600">Date:</Text>
-        <Text className="text-sm">
+        <Text className="text-off-white">Date:</Text>
+        <Text className="text-sm text-off-white">
           {formatDate(transaction.transactionDate)}
         </Text>
       </View>

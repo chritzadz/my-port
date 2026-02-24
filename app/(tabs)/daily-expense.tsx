@@ -181,7 +181,7 @@ export default function DailyExpense() {
           onPress={prevMonth}
           className="bg-pale-green rounded-full p-1"
         >
-          <ChevronLeft color="#B87C4C" size={28} />
+          <ChevronLeft color="#FFFFFF" size={28} />
         </TouchableOpacity>
         <View className="items-center">
           <Text className="text-xl font-bold text-gray-900">
@@ -192,7 +192,7 @@ export default function DailyExpense() {
           onPress={nextMonth}
           className="bg-pale-green rounded-full p-1"
         >
-          <ChevronRight color="#B87C4C" size={28} />
+          <ChevronRight color="#FFFFFF" size={28} />
         </TouchableOpacity>
       </View>
 
@@ -253,7 +253,7 @@ export default function DailyExpense() {
         }}
         className="absolute bottom-24 right-6 w-14 h-14 bg-pale-green rounded-full items-center justify-center shadow-lg"
       >
-        <Plus color="#B87C4C" size={28} />
+        <Plus color="#FFFFFF" size={28} />
       </TouchableOpacity>
 
       <DayModal

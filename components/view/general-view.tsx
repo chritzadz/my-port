@@ -32,10 +32,10 @@ export default function GeneralView({
   // Simple header for backward compatibility (no back button)
   if (!handleBack) {
     return (
-      <View className="flex-1 bg-white">
+      <View className="flex-1 bg-off-white">
         {displayTitle && (
           <View
-            className="bg-white px-6 pb-4"
+            className="bg-off-white px-6 pb-4"
             style={{ paddingTop: insets.top + 24 }}
           >
             <Text className="text-3xl font-bold text-gray-900">
