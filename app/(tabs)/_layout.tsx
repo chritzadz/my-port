@@ -1,11 +1,11 @@
-import * as Haptics from 'expo-haptics';
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Pressable, View } from 'react-native';
+import * as Haptics from "expo-haptics";
+import { Tabs } from "expo-router";
+import React from "react";
+import { Pressable, View } from "react-native";
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import classNames from 'classnames';
-import { Compass, Home } from 'lucide-react-native';
+import { useColorScheme } from "@/hooks/use-color-scheme";
+import classNames from "classnames";
+import { Compass, Home, Wallet } from "lucide-react-native";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -30,7 +30,7 @@ export default function TabLayout() {
                   key={route.key}
                   onPress={onPress}
                   onPressIn={() => {
-                    if (process.env.EXPO_OS === 'ios') {
+                    if (process.env.EXPO_OS === "ios") {
                       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                     }
                   }}
@@ -38,7 +38,7 @@ export default function TabLayout() {
                 >
                   {options.tabBarIcon?.({
                     focused: isFocused,
-                    color: 'white',
+                    color: "white",
                     size: 24,
                   })}
                 </Pressable>
@@ -50,27 +50,54 @@ export default function TabLayout() {
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
-      }}>
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: "Home",
           tabBarIcon: ({ color, focused }) => (
-            <View className={classNames("items-center justify-center w-14 h-12 rounded-full", { "bg-pale-green": focused })}>
-              <Home color={focused ? 'white' : 'white'} size={24} />
+            <View
+              className={classNames(
+                "items-center justify-center w-14 h-12 rounded-full",
+                { "bg-pale-green": focused },
+              )}
+            >
+              <Home color={focused ? "white" : "white"} size={24} />
             </View>
-          )
+          ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="transaction-list"
         options={{
-          title: 'Explore',
+          title: "Transaction",
           tabBarIcon: ({ color, focused }) => (
-            <View className={classNames("items-center justify-center w-12 h-12 rounded-full", {"bg-pale-green": focused} )}>
-              <Compass color={focused ? 'white' : 'white'} size={24} />
+            <View
+              className={classNames(
+                "items-center justify-center w-12 h-12 rounded-full",
+                { "bg-pale-green": focused },
+              )}
+            >
+              <Compass color={focused ? "white" : "white"} size={24} />
             </View>
-          )
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="daily-expense"
+        options={{
+          title: "Daily Expense",
+          tabBarIcon: ({ color, focused }) => (
+            <View
+              className={classNames(
+                "items-center justify-center w-12 h-12 rounded-full",
+                { "bg-pale-green": focused },
+              )}
+            >
+              <Wallet color={focused ? "white" : "white"} size={24} />
+            </View>
+          ),
         }}
       />
     </Tabs>

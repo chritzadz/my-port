@@ -1,50 +1,173 @@
-# Welcome to your Expo app 👋
+# MyPort - Portfolio Management App 📊
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+MyPort is a masically a portfolio management app that helps me manage my investment intruments, monitor basic P/L and see the growth based on the asset invested. It is done by manually inputting the transactions and calculate the basic profit and loss. Yes, it is not fully done, and that most of the UI here are built with the help of LLM. I prefer spending time on the backend which is not published (for security purposes). There is required an API key to access the backend.
 
-## Get started
+BUT currently the backend is only for my account :), which is useful for me, but not for everybody else. I will probably add the account management for the app, but for the time being, it will be for personalize use only.
 
-1. Install dependencies
+Now, hmm the API from the backend are free :), it is limited per request per day, or even limited a certain amount for some month. But it should do the trick for now... hopefully
+
+as per now, the GOLD api got limited already :).
+
+## Features
+
+### 📈 Portfolio Overview
+
+- **Interactive Pie Chart** - Visual breakdown of your investment portfolio
+- **Real-time P&L Tracking** - Monitor realized and unrealized gains/losses
+- **Multi-currency Support** - Track investments in USD, IDR, HKD
+- **Portfolio Summary** - Total value, transaction count, and performance metrics
+
+### 💰 Transaction Management
+
+- **Add Transactions** - Record buy/sell transactions with detailed information
+- **Transaction History** - View complete transaction list with filtering
+- **Multiple Asset Types** - Support for stocks, bonds, ETFs, and other instruments
+
+### 🔧 Portfolio Management
+
+- **Initial Capital Tracking** - Set and update your starting investment amount
+- **Currency Selection** - Choose from available currencies or add custom ones
+- **Real-time Updates** - Live portfolio updates as you add transactions
+
+## Tech Stack
+
+- **Frontend**: React Native with Expo
+- **Styling**: NativeWind (Tailwind CSS for React Native)
+- **Backend**: GraphQL API
+- **State Management**: Apollo Client
+- **Navigation**: Expo Router
+- **Icons**: Lucide React Native
+- **Charts**: React Native Pie Chart
+
+## Project Structure
+
+```
+app/
+├── (tabs)/           # Tab-based navigation
+│   ├── index.tsx     # Home screen with portfolio overview
+│   └── transaction-list.tsx  # Transaction management
+components/
+├── ui/               # Reusable UI components
+│   ├── add-transaction-modal.tsx
+│   ├── update-initial-capital-modal.tsx
+│   ├── currency-combobox.tsx
+│   ├── form-input.tsx
+│   └── combobox.tsx
+└── view/
+    └── general-view.tsx  # Layout wrapper
+hooks/
+├── use-transaction.ts    # Transaction operations
+├── use-currencies.ts     # Currency management
+├── use-instruments.ts    # Investment instruments
+└── use-total-asset.ts    # Portfolio calculations
+```
+
+## Getting Started
+
+1. **Install dependencies**
 
    ```bash
    npm install
    ```
 
-2. Start the app
+2. **Configure environment**
+   - Set up your GraphQL endpoint in `graphql-client.ts`
+   - Add your API key to the configuration
+
+3. **Start the development server**
 
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+4. **Run on device**
+   - Scan QR code with Expo Go app
+   - Or use iOS Simulator / Android Emulator
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Available Scripts
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- `npm start` - Start the Expo development server
+- `npm run android` - Run on Android device/emulator
+- `npm run ios` - Run on iOS device/simulator
+- `npm run web` - Run in web browser
+- `npx graphql-codegen` - Generate GraphQL types
 
-## Get a fresh project
+## GraphQL Schema
 
-When you're ready, run:
+The app connects to a GraphQL backend with the following main queries:
 
-```bash
-npm run reset-project
+```graphql
+query Currencies {
+  currencies {
+    code
+  }
+}
+
+query Transactions {
+  transactions {
+    id
+    instrumentSymbol
+    type
+    quantity
+    price
+    currency
+    transactionDate
+  }
+}
+
+query TotalAsset($currency: String!) {
+  totalAsset(currency: $currency) {
+    totalValue
+    totalPnl
+    transactionCount
+  }
+}
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Key Components
 
-## Learn more
+### Currency Combobox
 
-To learn more about developing your project with Expo, look at the following resources:
+Smart currency selector with:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- Searchable dropdown
+- Custom currency support
+- Automatic uppercase conversion
+- Fallback options when API unavailable
 
-## Join the community
+### Form Input
 
-Join our community of developers creating universal apps.
+Reusable form component with:
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- Consistent styling
+- Type-safe props
+- Required field indicators
+- Multiple keyboard types
+
+### Transaction Management
+
+Complete CRUD operations for:
+
+- Adding new transactions
+- Viewing transaction history
+- Updating portfolio capital
+- Currency conversion support
+
+## Color Palette
+
+- **Pale Green**: `#A8BBA3` - Primary accent
+- **Off White**: `#F7F4EA` - Background
+- **Pink White**: `#EBD9D1` - Secondary background
+- **Pale Brown**: `#B87C4C` - Navigation and buttons
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test on both iOS and Android
+5. Submit a pull request
+
+## License
+
+This project is for personal portfolio management and educational purposes.
