@@ -62,6 +62,7 @@ export type DailyExpense = {
 
 export type Instrument = {
   __typename?: 'Instrument';
+  currentPosition?: Maybe<Scalars['Float']['output']>;
   currentPrice?: Maybe<Scalars['Float']['output']>;
   dailyChange?: Maybe<Scalars['Float']['output']>;
   dailyChangePercent?: Maybe<Scalars['Float']['output']>;

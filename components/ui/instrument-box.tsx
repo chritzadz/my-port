@@ -41,6 +41,9 @@ export default function InstrumentBox({
         <Text className="text-base font-bold text-black">
           ${Number(instrument.value).toFixed(2)}
         </Text>
+        <Text className="text-base font-bold text-black">
+          {Number(instrument.currentPosition)}
+        </Text>
         {loading ? (
           <ActivityIndicator size="small" />
         ) : todayData ? (

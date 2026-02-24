@@ -32,7 +32,7 @@ export default function PortfolioPieChart({ data }: { data: Instrument[] }) {
   ];
 
   const series: Slice[] = data.map((item, index) => ({
-    value: Number(item.value) || 0,
+    value: Number(item.value) * Number(item.currentPosition) || 0,
     color: colors[index % colors.length],
   }));
 
@@ -54,7 +54,7 @@ export default function PortfolioPieChart({ data }: { data: Instrument[] }) {
         </Text>
         {data.map((item, index) => {
           const percentage = (
-            (Number(item.value) /
+            ((Number(item.value) * Number(item.currentPosition)) /
               series.reduce((sum, slice) => sum + slice.value, 0)) *
             100
           ).toFixed(1);

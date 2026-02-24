@@ -32,23 +32,36 @@ export function useGetTotalAsset(currency: string): {
   loading: boolean;
   error: Error | undefined;
   data: TotalAssetResult | undefined;
-  executeGetTotalAsset: () => void;
+  executeGetTotalAsset: (signal?: AbortSignal) => Promise<void>;
 } {
   const [getTotalAssetQuery, { loading, error, data }] =
     useLazyQuery<TotalAssetResult>(GET_TOTAL_ASSET, {
-      errorPolicy: "all",
+      errorPolicy: "none",
+      fetchPolicy: "cache-and-network",
     });
 
-  const executeGetTotalAsset = useCallback((): void => {
-    console.log("Executing total asset query for currency:", currency);
-    getTotalAssetQuery({ variables: { currency } })
-      .then((result) => {
+  const executeGetTotalAsset = useCallback(
+    async (signal?: AbortSignal): Promise<void> => {
+      try {
+        console.log("Executing total asset query for currency:", currency);
+        const result = await getTotalAssetQuery({
+          variables: { currency },
+          context: {
+            fetchOptions: {
+              signal,
+            },
+          },
+        });
         console.log("Total asset query completed:", result);
-      })
-      .catch((error) => {
+      } catch (error: any) {
+        if (error.name === "AbortError") {
+          return;
+        }
         console.error("Total asset query error:", error);
-      });
-  }, [getTotalAssetQuery, currency]);
+      }
+    },
+    [getTotalAssetQuery, currency],
+  );
 
   return {
     loading,

@@ -20,18 +20,29 @@ const INSTRUMENTS_QUERY = gql`
       volume
       lastRefreshed
       hasCurrentData
+      currentPosition
     }
   }
 `;
 
 export const useGetInstruments = () => {
   const [fetchInstruments, { loading, error, data }] =
-    useLazyQuery<InstrumentsResult>(INSTRUMENTS_QUERY);
+    useLazyQuery<InstrumentsResult>(INSTRUMENTS_QUERY, {
+      errorPolicy: "none", // Don't show errors in UI
+      fetchPolicy: "cache-and-network",
+    });
 
-  const executeGetInstruments = async (): Promise<Instrument[] | null> => {
+  const executeGetInstruments = async (
+    signal?: AbortSignal,
+  ): Promise<Instrument[] | null> => {
     try {
       const result = await fetchInstruments({
         variables: { currency: "HKD" },
+        context: {
+          fetchOptions: {
+            signal, // Pass AbortSignal for cancellation
+          },
+        },
       });
       if (result.data) {
         return result.data.instruments;
@@ -39,6 +50,10 @@ export const useGetInstruments = () => {
         return null;
       }
     } catch (err: any) {
+      // Silently ignore AbortError
+      if (err.name === "AbortError") {
+        return null;
+      }
       console.error("GraphQL Error:", JSON.stringify(err, null, 2));
       throw err;
     }

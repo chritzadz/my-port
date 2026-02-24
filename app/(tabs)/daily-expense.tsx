@@ -175,7 +175,7 @@ export default function DailyExpense() {
   }
 
   return (
-    <View className="flex-1 bg-off-white dark:bg-pale-brown pt-16">
+    <View className="flex-1 bg-off-white pt-16">
       <View className="flex-row items-center justify-between px-4 mb-4">
         <TouchableOpacity
           onPress={prevMonth}
@@ -184,7 +184,7 @@ export default function DailyExpense() {
           <ChevronLeft color="#B87C4C" size={28} />
         </TouchableOpacity>
         <View className="items-center">
-          <Text className="text-xl font-bold text-pale-brown dark:text-off-white">
+          <Text className="text-xl font-bold text-gray-900">
             {MONTHS[selectedMonth]} {selectedYear}
           </Text>
         </View>
@@ -207,7 +207,7 @@ export default function DailyExpense() {
               className={
                 selectedYear === year
                   ? "text-off-white font-bold"
-                  : "text-pale-brown"
+                  : "text-off-white"
               }
             >
               {year}

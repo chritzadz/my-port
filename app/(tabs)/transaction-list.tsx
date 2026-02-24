@@ -50,9 +50,9 @@ export default function TransactionListScreen() {
     <GeneralView title={"Transaction List"}>
       <View className="flex-1">
         {/* Action Buttons */}
-        <View className="px-4 py-2 space-y-2">
+        <View className="px-4 py-2 flex flex-row gap-2">
           <TouchableOpacity
-            className="bg-blue-500 rounded-lg py-3 px-4 flex-row items-center justify-center"
+            className="bg-blue-500 rounded-lg py-3 px-2 flex-row items-center justify-center"
             onPress={() => setAddModalVisible(true)}
           >
             <Plus color="white" size={20} />
@@ -62,7 +62,7 @@ export default function TransactionListScreen() {
           </TouchableOpacity>
 
           <TouchableOpacity
-            className="bg-green-500 rounded-lg py-3 px-4 flex-row items-center justify-center"
+            className="bg-green-500 rounded-lg py-3 px-2 flex-row items-center justify-center"
             onPress={() => setCapitalModalVisible(true)}
           >
             <DollarSign color="white" size={20} />
