@@ -1,15 +1,7 @@
 import classNames from "@/utils/classnames";
 import { ChevronDown } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import {
-  FlatList,
-  Modal,
-  Pressable,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { FlatList, Modal, Pressable, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export interface ComboboxOption {
   value: string;
@@ -43,15 +35,12 @@ export default function CurrencyCombobox({
   const [searchText, setSearchText] = useState("");
   const [customValue, setCustomValue] = useState(value || "");
 
+  const filteredOptions = options.filter((option) => option.label.toLowerCase().includes(searchText.toLowerCase()));
+  const selectedOption = options.find((opt) => opt.value === value);
+
   useEffect(() => {
     setCustomValue(value || "");
   }, [value]);
-
-  const filteredOptions = options.filter((option) =>
-    option.label.toLowerCase().includes(searchText.toLowerCase()),
-  );
-
-  const selectedOption = options.find((opt) => opt.value === value);
 
   const handleSelect = (optionValue: string) => {
     onValueChange(optionValue);
@@ -78,14 +67,11 @@ export default function CurrencyCombobox({
     <View className={className}>
       {/* Main Input */}
       <TouchableOpacity
-        className={classNames(
-          "border rounded-lg px-4 py-3 bg-white flex-row justify-between items-center",
-          {
-            "border-gray-300": !error,
-            "border-red-500": error != null,
-            "bg-gray-100": disabled,
-          },
-        )}
+        className={classNames("flex-row items-center justify-between rounded-lg border bg-white px-4 py-3", {
+          "border-gray-300": !error,
+          "border-red-500": error != null,
+          "bg-gray-100": disabled,
+        })}
         onPress={openDropdown}
         disabled={disabled}
       >
@@ -120,42 +106,23 @@ export default function CurrencyCombobox({
         />
       </TouchableOpacity>
 
-      {error && <Text className="text-red-500 text-sm mt-1">{error}</Text>}
+      {error && <Text className="mt-1 text-sm text-red-500">{error}</Text>}
 
       {/* Dropdown Modal */}
-      <Modal
-        visible={isOpen}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setIsOpen(false)}
-      >
-        <Pressable
-          className="flex-1 bg-black/50"
-          onPress={() => setIsOpen(false)}
-        >
-          <View className="flex-1 justify-center items-center p-4">
-            <Pressable
-              className="bg-white rounded-lg w-full max-w-sm max-h-96"
-              onPress={(e) => e.stopPropagation()}
-            >
+      <Modal visible={isOpen} transparent animationType="fade" onRequestClose={() => setIsOpen(false)}>
+        <Pressable className="flex-1 bg-black/50" onPress={() => setIsOpen(false)}>
+          <View className="flex-1 items-center justify-center p-4">
+            <Pressable className="max-h-96 w-full max-w-sm rounded-lg bg-white" onPress={(e) => e.stopPropagation()}>
               {/* Search Input */}
-              <View className="p-4 border-b border-gray-200">
-                <TextInput
-                  className="border border-gray-300 rounded-lg px-3 py-2 bg-white"
-                  value={searchText}
-                  onChangeText={setSearchText}
-                  placeholder="Search currencies..."
-                  autoFocus
-                />
+              <View className="border-b border-gray-200 p-4">
+                <TextInput className="rounded-lg border border-gray-300 bg-white px-3 py-2" value={searchText} onChangeText={setSearchText} placeholder="Search currencies..." autoFocus />
               </View>
 
               {/* Options List */}
               <View className="max-h-60">
                 {loading ? (
                   <View className="p-4">
-                    <Text className="text-center text-gray-500">
-                      Loading currencies...
-                    </Text>
+                    <Text className="text-center text-gray-500">Loading currencies...</Text>
                   </View>
                 ) : filteredOptions.length > 0 ? (
                   <FlatList
@@ -163,17 +130,14 @@ export default function CurrencyCombobox({
                     keyExtractor={(item) => item.value}
                     renderItem={({ item }) => (
                       <TouchableOpacity
-                        className={classNames(
-                          "px-4 py-3 border-b border-gray-100",
-                          {
-                            "bg-blue-50": item.value === value,
-                          },
-                        )}
+                        className={classNames("border-b border-gray-100 px-4 py-3", {
+                          "bg-blue-50": item.value === value,
+                        })}
                         onPress={() => handleSelect(item.value)}
                       >
                         <Text
                           className={classNames({
-                            "text-blue-600 font-medium": item.value === value,
+                            "font-medium text-blue-600": item.value === value,
                             "text-gray-900": item.value !== value,
                           })}
                         >
@@ -184,17 +148,10 @@ export default function CurrencyCombobox({
                   />
                 ) : (
                   <View className="p-4">
-                    <Text className="text-center text-gray-500">
-                      No currencies found
-                    </Text>
+                    <Text className="text-center text-gray-500">No currencies found</Text>
                     {allowCustomValue && searchText && (
-                      <TouchableOpacity
-                        className="mt-2 p-2 bg-blue-50 rounded"
-                        onPress={() => handleSelect(searchText.toUpperCase())}
-                      >
-                        <Text className="text-center text-blue-600">
-                          {`Use "${searchText.toUpperCase()}"`}
-                        </Text>
+                      <TouchableOpacity className="mt-2 rounded bg-blue-50 p-2" onPress={() => handleSelect(searchText.toUpperCase())}>
+                        <Text className="text-center text-blue-600">{`Use "${searchText.toUpperCase()}"`}</Text>
                       </TouchableOpacity>
                     )}
                   </View>
@@ -202,14 +159,9 @@ export default function CurrencyCombobox({
               </View>
 
               {/* Close Button */}
-              <View className="p-4 border-t border-gray-200">
-                <TouchableOpacity
-                  className="bg-gray-500 rounded-lg py-2 px-4"
-                  onPress={() => setIsOpen(false)}
-                >
-                  <Text className="text-white text-center font-medium">
-                    Close
-                  </Text>
+              <View className="border-t border-gray-200 p-4">
+                <TouchableOpacity className="rounded-lg bg-gray-500 px-4 py-2" onPress={() => setIsOpen(false)}>
+                  <Text className="text-center font-medium text-white">Close</Text>
                 </TouchableOpacity>
               </View>
             </Pressable>

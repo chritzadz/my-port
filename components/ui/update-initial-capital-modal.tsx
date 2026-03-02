@@ -28,8 +28,7 @@ export default function UpdateInitialCapitalModal({
   onSuccess,
 }: UpdateInitialCapitalModalProps) {
   const { executeUpdateInitialCapital, loading } = useUpdateInitialCapital();
-  const { executeGetCurrencies, loading: currenciesLoading } =
-    useGetCurrencies();
+  const { data: currencies, loading: currenciesLoading } = useGetCurrencies();
   const [currencyOptions, setCurrencyOptions] = useState<ComboboxOption[]>([]);
   const [formData, setFormData] = useState<UpdateInitialCapitalInput>({
     total: 0,
@@ -37,29 +36,14 @@ export default function UpdateInitialCapitalModal({
   });
 
   useEffect(() => {
-    const loadCurrencies = async () => {
-      try {
-        const currencies = await executeGetCurrencies();
-        if (currencies) {
-          const options = currencies.map((currency) => ({
-            value: currency.code,
-            label: currency.code,
-          }));
-          setCurrencyOptions(options);
-        }
-      } catch (err) {
-        console.error("Failed to load currencies:", err);
-        // Fallback options
-        setCurrencyOptions([
-          { value: "USD", label: "USD" },
-          { value: "EUR", label: "EUR" },
-          { value: "GBP", label: "GBP" },
-          { value: "HKD", label: "HKD" },
-        ]);
-      }
-    };
-    loadCurrencies();
-  }, [executeGetCurrencies]);
+    if (currencies) {
+      const options = currencies.map((currency) => ({
+        value: currency.code,
+        label: currency.code,
+      }));
+      setCurrencyOptions(options);
+    }
+  }, [currencies]);
 
   const resetForm = () => {
     setFormData({

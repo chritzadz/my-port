@@ -34,13 +34,8 @@ export default function GeneralView({
     return (
       <View className="flex-1 bg-off-white">
         {displayTitle && (
-          <View
-            className="bg-off-white px-6 pb-4"
-            style={{ paddingTop: insets.top + 24 }}
-          >
-            <Text className="text-3xl font-bold text-gray-900">
-              {displayTitle}
-            </Text>
+          <View className="bg-off-white px-6 pb-4" style={{ paddingTop: insets.top + 24 }}>
+            <Text className="text-3xl font-bold text-gray-900">{displayTitle}</Text>
           </View>
         )}
         {scrollable ? (
@@ -58,11 +53,7 @@ export default function GeneralView({
             <View className="flex-1">{children}</View>
           </ScrollView>
         ) : (
-          <View
-            className={`flex-1 ${className || "bg-white"} ${contentPadding ? "px-4 py-4" : ""}`}
-          >
-            {children}
-          </View>
+          <View className={`flex-1 ${className || "bg-white"} ${contentPadding ? "px-4 py-4" : ""}`}>{children}</View>
         )}
       </View>
     );
@@ -73,41 +64,25 @@ export default function GeneralView({
       {/* Fixed Sticky Header with Manual Safe Area */}
       {showOnlyBackButton ? (
         <View
-          className={classNames(
-            "bg-white px-6 pb-4 border-b border-gray-200 shadow-sm",
-            {
-              "shadow-sm": Platform.OS === "android",
-              "shadow-lg": Platform.OS === "ios",
-            },
-          )}
+          className={classNames("border-b border-gray-200 bg-white px-6 pb-4 shadow-sm", {
+            "shadow-sm": Platform.OS === "android",
+            "shadow-lg": Platform.OS === "ios",
+          })}
           style={{ paddingTop: insets.top + 24 }}
         >
           <View className="flex-row items-center">
             <Pressable onPress={handleBack} className="p-2">
-              <Ionicons
-                name="chevron-back-outline"
-                size={24}
-                color={tw("text-primary-red").color}
-              />
+              <Ionicons name="chevron-back-outline" size={24} color={tw("text-primary-red").color} />
             </Pressable>
           </View>
         </View>
       ) : (
-        <View
-          className="bg-white px-6 pb-4 border-b border-gray-200 shadow-md"
-          style={{ paddingTop: insets.top + 24 }}
-        >
+        <View className="border-b border-gray-200 bg-white px-6 pb-4 shadow-md" style={{ paddingTop: insets.top + 24 }}>
           <View className="flex-row items-center">
             <Pressable onPress={handleBack} className="p-2">
-              <Ionicons
-                name="chevron-back-outline"
-                size={24}
-                color={tw("text-primary-red").color}
-              />
+              <Ionicons name="chevron-back-outline" size={24} color={tw("text-primary-red").color} />
             </Pressable>
-            <Text className="text-2xl font-bold text-gray-900 ml-2">
-              {displayTitle}
-            </Text>
+            <Text className="ml-2 text-2xl font-bold text-gray-900">{displayTitle}</Text>
           </View>
         </View>
       )}
@@ -128,11 +103,7 @@ export default function GeneralView({
           <View className="flex-1">{children}</View>
         </ScrollView>
       ) : (
-        <View
-          className={`flex-1 ${className || "bg-white"} ${contentPadding ? "px-4 py-4" : ""}`}
-        >
-          {children}
-        </View>
+        <View className={`flex-1 ${className || "bg-white"} ${contentPadding ? "px-4 py-4" : ""}`}>{children}</View>
       )}
     </View>
   );

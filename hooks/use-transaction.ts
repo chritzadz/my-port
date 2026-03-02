@@ -4,7 +4,7 @@ import {
   Transaction,
 } from "@/graphql/__generated__/graphql";
 import { gql } from "@apollo/client";
-import { useLazyQuery, useMutation } from "@apollo/client/react";
+import { useMutation, useQuery } from "@apollo/client/react";
 
 export interface TransactionsResult {
   transactions: Transaction[];
@@ -70,24 +70,19 @@ const UPDATE_INITIAL_CAPITAL_MUTATION = gql`
 `;
 
 export const useGetTransactions = () => {
-  const [fetchTransactions, { loading, error, data }] =
-    useLazyQuery<TransactionsResult>(TRANSACTIONS_QUERY);
+  const { loading, error, data, refetch } = useQuery<TransactionsResult>(
+    TRANSACTIONS_QUERY,
+    {
+      fetchPolicy: "cache-first",
+    },
+  );
 
-  const executeGetTransactions = async (): Promise<Transaction[] | null> => {
-    try {
-      const result = await fetchTransactions();
-      if (result.data) {
-        return result.data.transactions;
-      } else {
-        return null;
-      }
-    } catch (err: any) {
-      console.error("GraphQL Error:", JSON.stringify(err, null, 2));
-      throw err;
-    }
+  return {
+    transactions: data?.transactions ?? [],
+    loading,
+    error,
+    refetch,
   };
-
-  return { executeGetTransactions, loading, error, data };
 };
 
 export const useAddTransaction = () => {

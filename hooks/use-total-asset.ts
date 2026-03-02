@@ -1,6 +1,5 @@
 import { gql } from "@apollo/client";
-import { useLazyQuery } from "@apollo/client/react";
-import { useCallback } from "react";
+import { useQuery } from "@apollo/client/react";
 
 const GET_TOTAL_ASSET = gql`
   query TotalAsset($currency: String!) {
@@ -32,41 +31,17 @@ export function useGetTotalAsset(currency: string): {
   loading: boolean;
   error: Error | undefined;
   data: TotalAssetResult | undefined;
-  executeGetTotalAsset: (signal?: AbortSignal) => Promise<void>;
 } {
-  const [getTotalAssetQuery, { loading, error, data }] =
-    useLazyQuery<TotalAssetResult>(GET_TOTAL_ASSET, {
-      errorPolicy: "none",
-      fetchPolicy: "cache-and-network",
-    });
-
-  const executeGetTotalAsset = useCallback(
-    async (signal?: AbortSignal): Promise<void> => {
-      try {
-        console.log("Executing total asset query for currency:", currency);
-        const result = await getTotalAssetQuery({
-          variables: { currency },
-          context: {
-            fetchOptions: {
-              signal,
-            },
-          },
-        });
-        console.log("Total asset query completed:", result);
-      } catch (error: any) {
-        if (error.name === "AbortError") {
-          return;
-        }
-        console.error("Total asset query error:", error);
-      }
-    },
-    [getTotalAssetQuery, currency],
-  );
+  const { loading, error, data } = useQuery<TotalAssetResult>(GET_TOTAL_ASSET, {
+    variables: { currency },
+    errorPolicy: "none",
+    fetchPolicy: "cache-first",
+    skip: !currency,
+  });
 
   return {
     loading,
     error,
     data,
-    executeGetTotalAsset,
   };
 }

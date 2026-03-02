@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-import { useLazyQuery } from "@apollo/client/react";
+import { useQuery } from "@apollo/client/react";
 
 export interface Currency {
   code: string;
@@ -18,22 +18,16 @@ const CURRENCIES_QUERY = gql`
 `;
 
 export const useGetCurrencies = () => {
-  const [fetchCurrencies, { loading, error, data }] =
-    useLazyQuery<CurrenciesResult>(CURRENCIES_QUERY);
+  const { loading, error, data } = useQuery<CurrenciesResult>(
+    CURRENCIES_QUERY,
+    {
+      fetchPolicy: "cache-first",
+    },
+  );
 
-  const executeGetCurrencies = async (): Promise<Currency[] | null> => {
-    try {
-      const result = await fetchCurrencies();
-      if (result.data) {
-        return result.data.currencies;
-      } else {
-        return null;
-      }
-    } catch (err: any) {
-      console.error("GraphQL Error:", JSON.stringify(err, null, 2));
-      throw err;
-    }
+  return {
+    data: data?.currencies ?? [],
+    loading,
+    error,
   };
-
-  return { executeGetCurrencies, loading, error, data };
 };

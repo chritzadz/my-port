@@ -28,13 +28,9 @@ export default function FormInput({
 }: FormInputProps) {
   return (
     <View className={className}>
-      {required ? (
-        <Text className="text-gray-700 font-medium mb-2">{label + "*"}</Text>
-      ) : (
-        <Text className="text-gray-700 font-medium mb-2">{label}</Text>
-      )}
+      {required ? <Text className="mb-2 font-medium text-gray-700">{label + "*"}</Text> : <Text className="mb-2 font-medium text-gray-700">{label}</Text>}
       <TextInput
-        className={`border border-gray-300 rounded-lg px-3 py-2 bg-white ${inputClassName}`}
+        className={`rounded-lg border border-gray-300 bg-white px-3 py-2 ${inputClassName}`}
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}

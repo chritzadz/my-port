@@ -3,8 +3,7 @@ import {
   QueryExpensesByDateRangeArgs,
 } from "@/graphql/__generated__/graphql";
 import { gql } from "@apollo/client";
-import { useLazyQuery } from "@apollo/client/react";
-import { useCallback } from "react";
+import { useQuery } from "@apollo/client/react";
 
 type ExpensesByDateRangeResult = {
   expensesByDateRange: DailyExpense[];
@@ -22,43 +21,20 @@ const EXPENSES_BY_DATE_RANGE_QUERY = gql`
   }
 `;
 
-export function useExpensesByDateRange() {
-  const [fetchExpenses, { loading, error, data }] = useLazyQuery<
+export function useExpensesByDateRange(from: string, to: string) {
+  const { loading, error, data, refetch } = useQuery<
     ExpensesByDateRangeResult,
     QueryExpensesByDateRangeArgs
   >(EXPENSES_BY_DATE_RANGE_QUERY, {
-    fetchPolicy: "network-only",
+    variables: { from, to },
+    skip: !from || !to,
+    fetchPolicy: "cache-first",
   });
 
-  const getExpensesByDateRange = useCallback(
-    async (from: string, to: string): Promise<DailyExpense[] | null> => {
-      console.log("FETCH EXPENSES: from=", from, " to=", to);
-      try {
-        const result = await fetchExpenses({
-          variables: { from, to },
-        });
-        console.log("RESULT:", JSON.stringify(result));
-        if (result.error) {
-          console.log("ERROR:", result.error.message);
-        }
-        if (result.data) {
-          console.log("DATA:", result.data.expensesByDateRange);
-          return result.data.expensesByDateRange;
-        } else {
-          return null;
-        }
-      } catch (e) {
-        console.log("CATCH ERROR:", e);
-        return null;
-      }
-    },
-    [fetchExpenses],
-  );
-
   return {
-    getExpensesByDateRange,
     loading,
     error,
     expenses: data?.expensesByDateRange ?? [],
+    refetch,
   };
 }

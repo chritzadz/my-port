@@ -1,15 +1,7 @@
 import classNames from "@/utils/classnames";
 import { ChevronDown } from "lucide-react-native";
 import React, { useState } from "react";
-import {
-  FlatList,
-  Modal,
-  Pressable,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { FlatList, Modal, Pressable, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export interface ComboboxOption {
   value: string;
@@ -48,13 +40,7 @@ export default function GenericCombobox({
 }: GenericComboboxProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
-
-  const filteredOptions = searchable
-    ? options.filter((option) =>
-        option.label.toLowerCase().includes(searchText.toLowerCase()),
-      )
-    : options;
-
+  const filteredOptions = searchable ? options.filter((option) => option.label.toLowerCase().includes(searchText.toLowerCase())) : options;
   const selectedOption = options.find((opt) => opt.value === value);
 
   const handleSelect = (optionValue: string) => {
@@ -73,19 +59,16 @@ export default function GenericCombobox({
     <View className={className}>
       {/* Main Trigger */}
       <TouchableOpacity
-        className={classNames(
-          "border rounded-lg px-4 py-3 bg-white flex-row justify-between items-center",
-          {
-            "border-gray-300": !error,
-            "border-red-500": error != null,
-            "bg-gray-100": disabled,
-          },
-        )}
+        className={classNames("flex-row items-center justify-between rounded-lg border bg-white px-4 py-3", {
+          "border-gray-300": !error,
+          "border-red-500": error != null,
+          "bg-gray-100": disabled,
+        })}
         onPress={openDropdown}
         disabled={disabled}
       >
         <Text
-          className={classNames("flex-1 text-md", {
+          className={classNames("text-md flex-1", {
             "text-gray-900": selectedOption != null,
             "text-gray-400": !selectedOption,
           })}
@@ -102,34 +85,17 @@ export default function GenericCombobox({
         />
       </TouchableOpacity>
 
-      {error && <Text className="text-red-500 text-sm mt-1">{error}</Text>}
+      {error && <Text className="mt-1 text-sm text-red-500">{error}</Text>}
 
       {/* Dropdown Modal */}
-      <Modal
-        visible={isOpen}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setIsOpen(false)}
-      >
-        <Pressable
-          className="flex-1 bg-black/50"
-          onPress={() => setIsOpen(false)}
-        >
-          <View className="flex-1 justify-center items-center p-4">
-            <Pressable
-              className="bg-white rounded-lg w-full max-w-sm max-h-96"
-              onPress={(e) => e.stopPropagation()}
-            >
+      <Modal visible={isOpen} transparent animationType="fade" onRequestClose={() => setIsOpen(false)}>
+        <Pressable className="flex-1 bg-black/50" onPress={() => setIsOpen(false)}>
+          <View className="flex-1 items-center justify-center p-4">
+            <Pressable className="max-h-96 w-full max-w-sm rounded-lg bg-white" onPress={(e) => e.stopPropagation()}>
               {/* Search Input */}
               {searchable && (
-                <View className="p-4 border-b border-gray-200">
-                  <TextInput
-                    className="border border-gray-300 rounded-lg px-3 py-2 bg-white"
-                    value={searchText}
-                    onChangeText={setSearchText}
-                    placeholder={searchPlaceholder}
-                    autoFocus
-                  />
+                <View className="border-b border-gray-200 p-4">
+                  <TextInput className="rounded-lg border border-gray-300 bg-white px-3 py-2" value={searchText} onChangeText={setSearchText} placeholder={searchPlaceholder} autoFocus />
                 </View>
               )}
 
@@ -137,9 +103,7 @@ export default function GenericCombobox({
               <View className="max-h-60">
                 {loading ? (
                   <View className="p-4">
-                    <Text className="text-center text-gray-500">
-                      Loading...
-                    </Text>
+                    <Text className="text-center text-gray-500">Loading...</Text>
                   </View>
                 ) : filteredOptions.length > 0 ? (
                   <FlatList
@@ -147,26 +111,18 @@ export default function GenericCombobox({
                     keyExtractor={(item) => item.value}
                     renderItem={({ item }) => (
                       <TouchableOpacity
-                        className={classNames(
-                          "px-4 py-3 border-b border-gray-100",
-                          {
-                            "bg-blue-50": item.value === value,
-                            "opacity-50":
-                              item.disabled != null && item.disabled,
-                          },
-                        )}
-                        onPress={() =>
-                          !item.disabled && handleSelect(item.value)
-                        }
+                        className={classNames("border-b border-gray-100 px-4 py-3", {
+                          "bg-blue-50": item.value === value,
+                          "opacity-50": item.disabled != null && item.disabled,
+                        })}
+                        onPress={() => !item.disabled && handleSelect(item.value)}
                         disabled={item.disabled}
                       >
                         <Text
                           className={classNames("text-md", {
-                            "text-blue-600 font-medium": item.value === value,
-                            "text-gray-900":
-                              item.value !== value && !item.disabled,
-                            "text-gray-400":
-                              item.disabled != null && item.disabled,
+                            "font-medium text-blue-600": item.value === value,
+                            "text-gray-900": item.value !== value && !item.disabled,
+                            "text-gray-400": item.disabled != null && item.disabled,
                           })}
                         >
                           {item.label}
@@ -176,17 +132,10 @@ export default function GenericCombobox({
                   />
                 ) : (
                   <View className="p-4">
-                    <Text className="text-center text-gray-500">
-                      {emptyMessage}
-                    </Text>
+                    <Text className="text-center text-gray-500">{emptyMessage}</Text>
                     {allowCustomValue && searchText && (
-                      <TouchableOpacity
-                        className="mt-2 p-2 bg-blue-50 rounded"
-                        onPress={() => handleSelect(searchText)}
-                      >
-                        <Text className="text-center text-blue-600">
-                          {`Use \"${searchText}\"`}
-                        </Text>
+                      <TouchableOpacity className="mt-2 rounded bg-blue-50 p-2" onPress={() => handleSelect(searchText)}>
+                        <Text className="text-center text-blue-600">{`Use \"${searchText}\"`}</Text>
                       </TouchableOpacity>
                     )}
                   </View>
@@ -194,14 +143,9 @@ export default function GenericCombobox({
               </View>
 
               {/* Close Button */}
-              <View className="p-4 border-t border-gray-200">
-                <TouchableOpacity
-                  className="bg-gray-500 rounded-lg py-2 px-4"
-                  onPress={() => setIsOpen(false)}
-                >
-                  <Text className="text-white text-center font-medium">
-                    Close
-                  </Text>
+              <View className="border-t border-gray-200 p-4">
+                <TouchableOpacity className="rounded-lg bg-gray-500 px-4 py-2" onPress={() => setIsOpen(false)}>
+                  <Text className="text-center font-medium text-white">Close</Text>
                 </TouchableOpacity>
               </View>
             </Pressable>

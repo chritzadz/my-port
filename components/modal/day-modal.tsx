@@ -1,14 +1,7 @@
 import { useThemeColor } from "@/hooks/use-theme-color";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import React from "react";
-import {
-  Modal,
-  Platform,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Modal, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 interface DayModalProps {
   visible: boolean;
@@ -41,30 +34,15 @@ const DayModal: React.FC<DayModalProps> = ({
 }) => {
   const bgColor = useThemeColor({}, "background");
   const textColor = useThemeColor({}, "text");
-  const modalBg = useThemeColor(
-    { light: "#fff", dark: "#1f2937" },
-    "background",
-  );
-  const borderColor = useThemeColor(
-    { light: "#e5e7eb", dark: "#374151" },
-    "background",
-  );
+  const modalBg = useThemeColor({ light: "#fff", dark: "#1f2937" }, "background");
+  const borderColor = useThemeColor({ light: "#e5e7eb", dark: "#374151" }, "background");
   const buttonBg = useThemeColor({ light: "#0a7ea4", dark: "#fff" }, "tint");
   const buttonText = useThemeColor({ light: "#fff", dark: "#0a7ea4" }, "tint");
   const closeText = useThemeColor({ light: "#0a7ea4", dark: "#fff" }, "tint");
   // Use a more vivid red for expenses
-  const expenseColor = useThemeColor(
-    { light: "#dc2626", dark: "#f43f5e" },
-    "tint",
-  );
-  const secondaryBg = useThemeColor(
-    { light: "#f3f4f6", dark: "#374151" },
-    "background",
-  );
-  const secondaryText = useThemeColor(
-    { light: "#374151", dark: "#d1d5db" },
-    "text",
-  );
+  const expenseColor = useThemeColor({ light: "#dc2626", dark: "#f43f5e" }, "tint");
+  const secondaryBg = useThemeColor({ light: "#f3f4f6", dark: "#374151" }, "background");
+  const secondaryText = useThemeColor({ light: "#374151", dark: "#d1d5db" }, "text");
 
   return (
     <Modal visible={visible} transparent animationType="slide">
@@ -93,11 +71,7 @@ const DayModal: React.FC<DayModalProps> = ({
             }}
           >
             <View style={{ gap: 8 }}>
-              <Text
-                style={{ fontSize: 18, fontWeight: "bold", color: textColor }}
-              >
-                Expenses for {selectedDateModal}
-              </Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold", color: textColor }}>Expenses for {selectedDateModal}</Text>
               <TouchableOpacity
                 onPress={() => setShowDatePicker(true)}
                 style={{
@@ -107,9 +81,7 @@ const DayModal: React.FC<DayModalProps> = ({
                   borderRadius: 8,
                 }}
               >
-                <Text style={{ color: secondaryText }}>
-                  {selectedDateModal || "Select Date"}
-                </Text>
+                <Text style={{ color: secondaryText }}>{selectedDateModal || "Select Date"}</Text>
               </TouchableOpacity>
               {showDatePicker && (
                 <DateTimePicker
@@ -119,11 +91,7 @@ const DayModal: React.FC<DayModalProps> = ({
                   onChange={(event, date) => {
                     setShowDatePicker(Platform.OS === "ios");
                     if (date) {
-                      const dateStr = formatDate(
-                        date.getFullYear(),
-                        date.getMonth(),
-                        date.getDate(),
-                      );
+                      const dateStr = formatDate(date.getFullYear(), date.getMonth(), date.getDate());
                       setSelectedDateModal(dateStr);
                     }
                   }}
@@ -183,9 +151,7 @@ const DayModal: React.FC<DayModalProps> = ({
               alignItems: "center",
             }}
           >
-            <Text style={{ color: buttonText, fontWeight: "bold" }}>
-              Add Expense
-            </Text>
+            <Text style={{ color: buttonText, fontWeight: "bold" }}>Add Expense</Text>
           </TouchableOpacity>
         </View>
       </View>

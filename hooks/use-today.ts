@@ -1,6 +1,5 @@
 import { gql } from "@apollo/client";
-import { useLazyQuery } from "@apollo/client/react";
-import { useCallback } from "react";
+import { useQuery } from "@apollo/client/react";
 
 const GET_TODAY = gql`
   query Today($symbol: String!, $currency: String) {
@@ -36,30 +35,17 @@ export function useGetToday(symbol: string): {
   loading: boolean;
   error: Error | undefined;
   data: TodayResult | undefined;
-  executeGetToday: () => void;
 } {
-  const [getTodayQuery, { loading, error, data }] = useLazyQuery<TodayResult>(
-    GET_TODAY,
-    {
-      errorPolicy: "all",
-    },
-  );
-
-  const executeGetToday = useCallback((): void => {
-    console.log("Executing today query for symbol:", symbol);
-    getTodayQuery({ variables: { symbol, currency: "HKD" } })
-      .then((result) => {
-        console.log("Today query completed:", result);
-      })
-      .catch((error) => {
-        console.error("Today query error:", error);
-      });
-  }, [getTodayQuery, symbol]);
+  const { loading, error, data } = useQuery<TodayResult>(GET_TODAY, {
+    variables: { symbol, currency: "HKD" },
+    errorPolicy: "all",
+    skip: !symbol, // clean way to avoid running if symbol is empty
+    fetchPolicy: "cache-first",
+  });
 
   return {
     loading,
     error,
     data,
-    executeGetToday,
   };
 }

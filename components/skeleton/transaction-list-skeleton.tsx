@@ -10,14 +10,7 @@ interface ShimmerViewProps {
   style?: ViewStyle;
 }
 
-export default function TransactionListSkeleton({
-  isLoading,
-  children,
-  shimmerColor = "#E1E9EE",
-  highlightColor = "#F2F8FC",
-  duration = 1500,
-  style,
-}: ShimmerViewProps) {
+export default function TransactionListSkeleton({ isLoading, children, shimmerColor = "#E1E9EE", highlightColor = "#F2F8FC", duration = 1500, style }: ShimmerViewProps) {
   const shimmerAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -43,17 +36,7 @@ export default function TransactionListSkeleton({
     outputRange: [0.3, 1, 0.3],
   });
 
-  const SkeletonBox = ({
-    width,
-    height,
-    borderRadius = 8,
-    marginBottom = 12,
-  }: {
-    width: number | string;
-    height: number;
-    borderRadius?: number;
-    marginBottom?: number;
-  }) => (
+  const SkeletonBox = ({ width, height, borderRadius = 8, marginBottom = 12 }: { width: number | string; height: number; borderRadius?: number; marginBottom?: number }) => (
     <Animated.View
       style={{
         width,
@@ -69,60 +52,15 @@ export default function TransactionListSkeleton({
   return (
     <View style={[style, { padding: 20 }]}>
       {/* Portfolio Summary Box */}
-      <SkeletonBox
-        width="100%"
-        height={120}
-        borderRadius={12}
-        marginBottom={20}
-      />
-      <SkeletonBox
-        width="100%"
-        height={120}
-        borderRadius={12}
-        marginBottom={20}
-      />
-      <SkeletonBox
-        width="100%"
-        height={120}
-        borderRadius={12}
-        marginBottom={20}
-      />
-      <SkeletonBox
-        width="100%"
-        height={120}
-        borderRadius={12}
-        marginBottom={20}
-      />
-      <SkeletonBox
-        width="100%"
-        height={120}
-        borderRadius={12}
-        marginBottom={20}
-      />
-      <SkeletonBox
-        width="100%"
-        height={120}
-        borderRadius={12}
-        marginBottom={20}
-      />
-      <SkeletonBox
-        width="100%"
-        height={120}
-        borderRadius={12}
-        marginBottom={20}
-      />
-      <SkeletonBox
-        width="100%"
-        height={120}
-        borderRadius={12}
-        marginBottom={20}
-      />
-      <SkeletonBox
-        width="100%"
-        height={120}
-        borderRadius={12}
-        marginBottom={20}
-      />
+      <SkeletonBox width="100%" height={120} borderRadius={12} marginBottom={20} />
+      <SkeletonBox width="100%" height={120} borderRadius={12} marginBottom={20} />
+      <SkeletonBox width="100%" height={120} borderRadius={12} marginBottom={20} />
+      <SkeletonBox width="100%" height={120} borderRadius={12} marginBottom={20} />
+      <SkeletonBox width="100%" height={120} borderRadius={12} marginBottom={20} />
+      <SkeletonBox width="100%" height={120} borderRadius={12} marginBottom={20} />
+      <SkeletonBox width="100%" height={120} borderRadius={12} marginBottom={20} />
+      <SkeletonBox width="100%" height={120} borderRadius={12} marginBottom={20} />
+      <SkeletonBox width="100%" height={120} borderRadius={12} marginBottom={20} />
     </View>
   );
 }

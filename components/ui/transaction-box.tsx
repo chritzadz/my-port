@@ -8,9 +8,7 @@ interface TransactionBoxProps {
 export default function TransactionBox({ transaction }: TransactionBoxProps) {
   const formatDate = (dateString: string) => {
     // Handle timestamp format - convert to number if it's a timestamp
-    const date = isNaN(Number(dateString))
-      ? new Date(dateString)
-      : new Date(Number(dateString));
+    const date = isNaN(Number(dateString)) ? new Date(dateString) : new Date(Number(dateString));
     return date.toLocaleDateString();
   };
 
@@ -30,57 +28,35 @@ export default function TransactionBox({ transaction }: TransactionBoxProps) {
   };
 
   return (
-    <TouchableOpacity
-      className="bg-pale-brown rounded-lg p-4 mb-3 shadow-sm border border-gray-200"
-      onPress={handlePress}
-    >
-      <View className="flex-row justify-between items-center mb-2">
-        <Text className="font-bold text-lg text-off-white">
-          {transaction.instrumentSymbol}
-        </Text>
-        <Text
-          className={`font-semibold ${getTransactionTypeColor(transaction.type)}`}
-        >
-          {transaction.type}
-        </Text>
+    <TouchableOpacity className="mb-3 rounded-lg border border-gray-200 bg-pale-brown p-4 shadow-sm" onPress={handlePress}>
+      <View className="mb-2 flex-row items-center justify-between">
+        <Text className="text-lg font-bold text-off-white">{transaction.instrumentSymbol}</Text>
+        <Text className={`font-semibold ${getTransactionTypeColor(transaction.type)}`}>{transaction.type}</Text>
       </View>
 
-      <View className="flex-row justify-between items-center mb-1">
+      <View className="mb-1 flex-row items-center justify-between">
         <Text className="text-off-white">Quantity:</Text>
-        <Text className="font-medium text-off-white">
-          {transaction.quantity}
-        </Text>
+        <Text className="font-medium text-off-white">{transaction.quantity}</Text>
       </View>
 
-      <View className="flex-row justify-between items-center mb-1">
+      <View className="mb-1 flex-row items-center justify-between">
         <Text className="text-off-white">Price:</Text>
-        <Text className="font-medium text-off-white">
-          {formatCurrency(transaction.price, transaction.currency)}
-        </Text>
+        <Text className="font-medium text-off-white">{formatCurrency(transaction.price, transaction.currency)}</Text>
       </View>
 
-      <View className="flex-row justify-between items-center mb-1">
+      <View className="mb-1 flex-row items-center justify-between">
         <Text className="text-off-white ">Total:</Text>
-        <Text className="font-medium text-off-white">
-          {formatCurrency(
-            transaction.price * transaction.quantity,
-            transaction.currency,
-          )}
-        </Text>
+        <Text className="font-medium text-off-white">{formatCurrency(transaction.price * transaction.quantity, transaction.currency)}</Text>
       </View>
 
-      <View className="flex-row justify-between items-center mb-1">
+      <View className="mb-1 flex-row items-center justify-between">
         <Text className="text-off-white">Type:</Text>
-        <Text className="text-sm text-off-white">
-          {transaction.instrumentType}
-        </Text>
+        <Text className="text-sm text-off-white">{transaction.instrumentType}</Text>
       </View>
 
-      <View className="flex-row justify-between items-center">
+      <View className="flex-row items-center justify-between">
         <Text className="text-off-white">Date:</Text>
-        <Text className="text-sm text-off-white">
-          {formatDate(transaction.transactionDate)}
-        </Text>
+        <Text className="text-sm text-off-white">{formatDate(transaction.transactionDate)}</Text>
       </View>
     </TouchableOpacity>
   );
