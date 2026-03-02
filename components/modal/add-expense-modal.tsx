@@ -1,6 +1,6 @@
-import { useThemeColor } from "@/hooks/use-theme-color";
 import React from "react";
-import { Keyboard, KeyboardAvoidingView, Modal, Platform, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
+import { Keyboard, Modal, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import FormInput from "../ui/form-input";
 
 interface AddExpenseModalProps {
   visible: boolean;
@@ -17,130 +17,40 @@ interface AddExpenseModalProps {
 }
 
 const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ visible, loading, selectedDate, item, setItem, expenseAmount, setExpenseAmount, currency, setCurrency, onAddExpense, onClose }) => {
-  const textColor = useThemeColor({}, "text");
-  const modalBg = useThemeColor({ light: "#fff", dark: "#1f2937" }, "background");
-  const buttonBg = useThemeColor({ light: "#0a7ea4", dark: "#fff" }, "tint");
-  const buttonText = useThemeColor({ light: "#fff", dark: "#0a7ea4" }, "tint");
-  const closeText = useThemeColor({ light: "#0a7ea4", dark: "#fff" }, "tint");
-  const labelText = useThemeColor({ light: "#6b7280", dark: "#d1d5db" }, "text");
-  const inputBg = useThemeColor({ light: "#fff", dark: "#374151" }, "background");
-  const inputText = useThemeColor({}, "text");
-  const inputBorder = useThemeColor({ light: "#d1d5db", dark: "#4b5563" }, "background");
-  const placeholderText = useThemeColor({ light: "#999", dark: "#6b7280" }, "text");
-  const disabledBg = useThemeColor({ light: "#d1d5db", dark: "#374151" }, "background");
+  const handleClose = () => {
+    Keyboard.dismiss();
+    onClose();
+  };
 
   return (
-    <Modal
-      visible={visible}
-      transparent
-      animationType="slide"
-      onRequestClose={() => {
-        Keyboard.dismiss();
-        onClose();
-      }}
-    >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={{
-            flex: 1,
-            justifyContent: "flex-end",
-            backgroundColor: "rgba(0,0,0,0.5)",
-          }}
-        >
-          <TouchableWithoutFeedback>
-            <View
-              style={{
-                backgroundColor: modalBg,
-                borderTopLeftRadius: 24,
-                borderTopRightRadius: 24,
-                padding: 24,
-              }}
-            >
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginBottom: 16,
-                }}
-              >
-                <Text style={{ fontSize: 18, fontWeight: "bold", color: textColor }}>Add Expense</Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    Keyboard.dismiss();
-                    onClose();
-                  }}
-                >
-                  <Text style={{ color: closeText, fontWeight: "600" }}>Close</Text>
-                </TouchableOpacity>
-              </View>
-              <Text style={{ marginBottom: 8, color: labelText }}>Date: {selectedDate}</Text>
-              <TextInput
-                placeholder="Item (e.g., MTR, Food)"
-                value={item}
-                onChangeText={setItem}
-                style={{
-                  borderWidth: 1,
-                  borderColor: inputBorder,
-                  borderRadius: 8,
-                  paddingHorizontal: 12,
-                  paddingVertical: 8,
-                  marginBottom: 12,
-                  color: inputText,
-                  backgroundColor: inputBg,
-                }}
-                placeholderTextColor={placeholderText}
-              />
-              <TextInput
-                placeholder="Expense Amount"
-                value={expenseAmount}
-                onChangeText={setExpenseAmount}
-                keyboardType="numeric"
-                style={{
-                  borderWidth: 1,
-                  borderColor: inputBorder,
-                  borderRadius: 8,
-                  paddingHorizontal: 12,
-                  paddingVertical: 8,
-                  marginBottom: 12,
-                  color: inputText,
-                  backgroundColor: inputBg,
-                }}
-                placeholderTextColor={placeholderText}
-              />
-              <TextInput
-                placeholder="Currency (e.g., USD)"
-                value={currency}
-                onChangeText={setCurrency}
-                style={{
-                  borderWidth: 1,
-                  borderColor: inputBorder,
-                  borderRadius: 8,
-                  paddingHorizontal: 12,
-                  paddingVertical: 8,
-                  marginBottom: 16,
-                  color: inputText,
-                  backgroundColor: inputBg,
-                }}
-                placeholderTextColor={placeholderText}
-              />
-              <TouchableOpacity
-                onPress={onAddExpense}
-                disabled={loading}
-                style={{
-                  borderRadius: 8,
-                  paddingVertical: 12,
-                  alignItems: "center",
-                  backgroundColor: loading ? disabledBg : buttonBg,
-                }}
-              >
-                <Text style={{ color: buttonText, fontWeight: "bold" }}>{loading ? "Adding..." : "Add Expense"}</Text>
-              </TouchableOpacity>
+    <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
+      <View className="flex-1 bg-gray-50">
+        <View className="border-b border-gray-200 bg-white px-4 py-3">
+          <View className="flex-row items-center justify-between">
+            <TouchableOpacity onPress={handleClose}>
+              <Text className="text-lg text-blue-500">Cancel</Text>
+            </TouchableOpacity>
+            <Text className="text-lg font-semibold">Add Expense</Text>
+            <TouchableOpacity onPress={onAddExpense} disabled={loading}>
+              <Text className="text-lg font-semibold text-blue-500">{loading ? "Adding..." : "Save"}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <ScrollView className="flex-1 p-4">
+          <View className="space-y-4">
+            <View className="mb-2 rounded-lg bg-blue-50 p-3">
+              <Text className="text-sm text-gray-600">Date: {selectedDate}</Text>
             </View>
-          </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
-      </TouchableWithoutFeedback>
+
+            <FormInput className="my-2" label="Item" value={item} onChangeText={setItem} placeholder="e.g., MTR, Food" required />
+
+            <FormInput className="my-2" label="Expense Amount" value={expenseAmount} onChangeText={setExpenseAmount} placeholder="0.00" required keyboardType="numeric" />
+
+            <FormInput className="my-2" label="Currency" value={currency} onChangeText={setCurrency} placeholder="e.g., USD, HKD" required autoCapitalize="characters" />
+          </View>
+        </ScrollView>
+      </View>
     </Modal>
   );
 };

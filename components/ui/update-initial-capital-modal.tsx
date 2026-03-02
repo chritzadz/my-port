@@ -1,17 +1,7 @@
 import { useGetCurrencies } from "@/hooks/use-currencies";
-import {
-  UpdateInitialCapitalInput,
-  useUpdateInitialCapital,
-} from "@/hooks/use-transaction";
+import { UpdateInitialCapitalInput, useUpdateInitialCapital } from "@/hooks/use-transaction";
 import { useEffect, useState } from "react";
-import {
-  Alert,
-  Modal,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Alert, Modal, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { ComboboxOption } from "./combobox";
 import CurrencyCombobox from "./currency-combobox";
 import FormInput from "./form-input";
@@ -22,11 +12,7 @@ interface UpdateInitialCapitalModalProps {
   onSuccess: () => void;
 }
 
-export default function UpdateInitialCapitalModal({
-  visible,
-  onClose,
-  onSuccess,
-}: UpdateInitialCapitalModalProps) {
+export default function UpdateInitialCapitalModal({ visible, onClose, onSuccess }: UpdateInitialCapitalModalProps) {
   const { executeUpdateInitialCapital, loading } = useUpdateInitialCapital();
   const { data: currencies, loading: currenciesLoading } = useGetCurrencies();
   const [currencyOptions, setCurrencyOptions] = useState<ComboboxOption[]>([]);
@@ -84,24 +70,16 @@ export default function UpdateInitialCapitalModal({
   };
 
   return (
-    <Modal
-      visible={visible}
-      animationType="slide"
-      presentationStyle="pageSheet"
-    >
+    <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
       <View className="flex-1 bg-gray-50">
-        <View className="bg-white px-4 py-3 border-b border-gray-200">
-          <View className="flex-row justify-between items-center">
+        <View className="border-b border-gray-200 bg-white px-4 py-3">
+          <View className="flex-row items-center justify-between">
             <TouchableOpacity onPress={handleClose}>
-              <Text className="text-blue-500 text-lg">Cancel</Text>
+              <Text className="text-lg text-blue-500">Cancel</Text>
             </TouchableOpacity>
-            <Text className="text-lg font-semibold">
-              Update Initial Capital
-            </Text>
+            <Text className="text-lg font-semibold">Update Initial Capital</Text>
             <TouchableOpacity onPress={handleSubmit} disabled={loading}>
-              <Text className="text-blue-500 text-lg font-semibold">
-                {loading ? "Updating..." : "Save"}
-              </Text>
+              <Text className="text-lg font-semibold text-blue-500">{loading ? "Updating..." : "Save"}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -112,50 +90,36 @@ export default function UpdateInitialCapitalModal({
               <FormInput
                 label="Initial Capital Amount"
                 value={formData.total.toString()}
-                onChangeText={(text: string) =>
-                  setFormData({ ...formData, total: parseFloat(text) || 0 })
-                }
+                onChangeText={(text: string) => setFormData({ ...formData, total: parseFloat(text) || 0 })}
                 placeholder="0.00"
                 required
                 keyboardType="numeric"
               />
-              <Text className="text-gray-500 text-sm mt-1">
-                Enter your starting investment amount
-              </Text>
+              <Text className="mt-1 text-sm text-gray-500">Enter your starting investment amount</Text>
             </View>
 
             <View>
-              <Text className="text-gray-700 font-medium mb-2 text-md">
-                Currency*
-              </Text>
+              <Text className="text-md mb-2 font-medium text-gray-700">Currency*</Text>
               <CurrencyCombobox
                 options={currencyOptions}
                 value={formData.currency}
-                onValueChange={(value: string) =>
-                  setFormData({ ...formData, currency: value })
-                }
+                onValueChange={(value: string) => setFormData({ ...formData, currency: value })}
                 placeholder="USD"
                 loading={currenciesLoading}
                 allowCustomValue={true}
               />
-              <Text className="text-gray-500 text-sm mt-1">
-                Enter the currency code (e.g., USD, EUR, GBP)
-              </Text>
+              <Text className="mt-1 text-sm text-gray-500">Enter the currency code (e.g., USD, EUR, GBP)</Text>
             </View>
 
-            <View className="mt-6 p-4 bg-blue-50 rounded-lg">
-              <Text className="text-lg font-medium text-blue-800 mb-2">
-                Summary
-              </Text>
+            <View className="mt-6 rounded-lg bg-blue-50 p-4">
+              <Text className="mb-2 text-lg font-medium text-blue-800">Summary</Text>
               <Text className="text-blue-700">
                 Initial Capital: {formData.currency} {formData.total.toFixed(2)}
               </Text>
             </View>
 
-            <View className="mt-4 p-3 bg-yellow-50 rounded-lg">
-              <Text className="text-sm text-yellow-800">
-                {`⚠️This will update your portfolio's initial capital amount. Make sure this reflects your actual investment made.`}
-              </Text>
+            <View className="mt-4 rounded-lg bg-yellow-50 p-3">
+              <Text className="text-sm text-yellow-800">{`⚠️This will update your portfolio's initial capital amount. Make sure this reflects your actual investment made.`}</Text>
             </View>
           </View>
         </ScrollView>

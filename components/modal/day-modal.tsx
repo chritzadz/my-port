@@ -1,4 +1,3 @@
-import { useThemeColor } from "@/hooks/use-theme-color";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import React from "react";
 import { Modal, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
@@ -32,56 +31,38 @@ const DayModal: React.FC<DayModalProps> = ({
   setSelectedDate,
   onAddExpense,
 }) => {
-  const bgColor = useThemeColor({}, "background");
-  const textColor = useThemeColor({}, "text");
-  const modalBg = useThemeColor({ light: "#fff", dark: "#1f2937" }, "background");
-  const borderColor = useThemeColor({ light: "#e5e7eb", dark: "#374151" }, "background");
-  const buttonBg = useThemeColor({ light: "#0a7ea4", dark: "#fff" }, "tint");
-  const buttonText = useThemeColor({ light: "#fff", dark: "#0a7ea4" }, "tint");
-  const closeText = useThemeColor({ light: "#0a7ea4", dark: "#fff" }, "tint");
-  // Use a more vivid red for expenses
-  const expenseColor = useThemeColor({ light: "#dc2626", dark: "#f43f5e" }, "tint");
-  const secondaryBg = useThemeColor({ light: "#f3f4f6", dark: "#374151" }, "background");
-  const secondaryText = useThemeColor({ light: "#374151", dark: "#d1d5db" }, "text");
+  const handleClose = () => {
+    setShowDayModal(false);
+    setSelectedDateModal(selectedDate || "");
+  };
 
   return (
-    <Modal visible={visible} transparent animationType="slide">
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "flex-end",
-          backgroundColor: "rgba(0,0,0,0.5)",
-        }}
-      >
-        <View
-          style={{
-            backgroundColor: modalBg,
-            borderTopLeftRadius: 24,
-            borderTopRightRadius: 24,
-            padding: 24,
-            maxHeight: 800,
-          }}
-        >
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: 16,
-            }}
-          >
-            <View style={{ gap: 8 }}>
-              <Text style={{ fontSize: 18, fontWeight: "bold", color: textColor }}>Expenses for {selectedDateModal}</Text>
-              <TouchableOpacity
-                onPress={() => setShowDatePicker(true)}
-                style={{
-                  backgroundColor: secondaryBg,
-                  paddingHorizontal: 16,
-                  paddingVertical: 8,
-                  borderRadius: 8,
-                }}
-              >
-                <Text style={{ color: secondaryText }}>{selectedDateModal || "Select Date"}</Text>
+    <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
+      <View className="flex-1 bg-gray-50">
+        <View className="border-b border-gray-200 bg-white px-4 py-3">
+          <View className="flex-row items-center justify-between">
+            <TouchableOpacity onPress={handleClose}>
+              <Text className="text-lg text-blue-500">Close</Text>
+            </TouchableOpacity>
+            <Text className="text-lg font-semibold">Expenses</Text>
+            <TouchableOpacity
+              onPress={() => {
+                setShowDayModal(false);
+                onAddExpense();
+              }}
+            >
+              <Text className="text-lg font-semibold text-blue-500">Add</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <ScrollView className="flex-1 p-4">
+          <View className="space-y-4">
+            {/* Date Picker */}
+            <View>
+              <Text className="mb-2 font-medium text-gray-700">Date</Text>
+              <TouchableOpacity onPress={() => setShowDatePicker(true)} className="rounded-lg bg-gray-200 px-4 py-3">
+                <Text className="text-gray-700">{selectedDateModal || "Select Date"}</Text>
               </TouchableOpacity>
               {showDatePicker && (
                 <DateTimePicker
@@ -98,62 +79,24 @@ const DayModal: React.FC<DayModalProps> = ({
                 />
               )}
             </View>
-            <TouchableOpacity
-              onPress={() => {
-                setShowDayModal(false);
-                setSelectedDateModal(selectedDate);
-              }}
-            >
-              <Text style={{ color: closeText, fontWeight: "600" }}>Close</Text>
-            </TouchableOpacity>
+
+            {/* Expenses List */}
+            {selectedDate && getExpensesForDate(selectedDate).length > 0 ? (
+              <View>
+                {getExpensesForDate(selectedDate).map((exp) => (
+                  <View key={exp.id} className="flex-row items-center justify-between border-b border-gray-200 py-3">
+                    <Text className="text-base text-gray-900">{exp.item}</Text>
+                    <Text className="text-base font-bold text-red-500">
+                      {exp.expense} {exp.currency}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            ) : (
+              <Text className="mt-8 text-center text-gray-500">No expenses for this day</Text>
+            )}
           </View>
-          {selectedDate && getExpensesForDate(selectedDate).length > 0 ? (
-            <ScrollView>
-              {getExpensesForDate(selectedDate).map((exp) => (
-                <View
-                  key={exp.id}
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    paddingVertical: 8,
-                    borderBottomWidth: 1,
-                    borderBottomColor: borderColor,
-                  }}
-                >
-                  <Text style={{ color: textColor }}>{exp.item}</Text>
-                  <Text style={{ color: expenseColor, fontWeight: "bold" }}>
-                    {exp.expense} {exp.currency}
-                  </Text>
-                </View>
-              ))}
-            </ScrollView>
-          ) : (
-            <Text
-              style={{
-                color: secondaryText,
-                textAlign: "center",
-                marginTop: 32,
-              }}
-            >
-              No expenses for this day
-            </Text>
-          )}
-          <TouchableOpacity
-            onPress={() => {
-              setShowDayModal(false);
-              onAddExpense();
-            }}
-            style={{
-              marginTop: 16,
-              backgroundColor: buttonBg,
-              borderRadius: 8,
-              paddingVertical: 12,
-              alignItems: "center",
-            }}
-          >
-            <Text style={{ color: buttonText, fontWeight: "bold" }}>Add Expense</Text>
-          </TouchableOpacity>
-        </View>
+        </ScrollView>
       </View>
     </Modal>
   );
