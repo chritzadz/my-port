@@ -104,9 +104,9 @@ export default function DailyExpense() {
   }
 
   return (
-    <View className="flex-1 bg-off-white pt-16">
+    <View className="bg-ivory flex-1 pt-16">
       <View className="mb-4 flex-row items-center justify-between px-4">
-        <TouchableOpacity onPress={prevMonth} className="rounded-full bg-pale-green p-1">
+        <TouchableOpacity onPress={prevMonth} className="bg-muted rounded-full p-1">
           <ChevronLeft color="#FFFFFF" size={28} />
         </TouchableOpacity>
         <View className="items-center">
@@ -114,15 +114,15 @@ export default function DailyExpense() {
             {MONTHS[selectedMonth]} {selectedYear}
           </Text>
         </View>
-        <TouchableOpacity onPress={nextMonth} className="rounded-full bg-pale-green p-1">
+        <TouchableOpacity onPress={nextMonth} className="bg-muted rounded-full p-1">
           <ChevronRight color="#FFFFFF" size={28} />
         </TouchableOpacity>
       </View>
 
       <View className="mb-4 flex-row justify-center">
         {[2026, 2027, 2028].map((year) => (
-          <TouchableOpacity key={year} onPress={() => setSelectedYear(year)} className={`mx-1 rounded-full px-4 py-2 ${selectedYear === year ? "bg-pale-brown" : "bg-pale-green"}`}>
-            <Text className={selectedYear === year ? "font-bold text-off-white" : "text-off-white"}>{year}</Text>
+          <TouchableOpacity key={year} onPress={() => setSelectedYear(year)} className={`mx-1 rounded-full px-4 py-2 ${selectedYear === year ? "bg-charcoal" : "bg-muted"}`}>
+            <Text className={selectedYear === year ? "text-ivory font-bold" : "text-ivory"}>{year}</Text>
           </TouchableOpacity>
         ))}
       </View>

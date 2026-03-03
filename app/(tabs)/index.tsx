@@ -31,7 +31,7 @@ export default function HomeScreen() {
   }
 
   return (
-    <GeneralView className={"bg-off-white"} title={"MyPort"} scrollable={true}>
+    <GeneralView className={"bg-ivory"} title={"MyPort"} scrollable={true}>
       <IndexSkeleton isLoading={loading}>
         {/* Pie Chart */}
         <View className="p-5">
@@ -43,34 +43,34 @@ export default function HomeScreen() {
           {totalAssetLoading ? (
             <ActivityIndicator size="small" />
           ) : totalAssetData?.totalAsset ? (
-            <View className="rounded-lg bg-pale-brown p-4">
-              <Text className="mb-2 text-lg font-bold text-off-white">Portfolio Summary</Text>
+            <View className="bg-charcoal rounded-lg p-4">
+              <Text className="text-ivory mb-2 text-lg font-bold">Portfolio Summary</Text>
               <View className="flex-row justify-between">
-                <Text className="text-base text-off-white">Total Value:</Text>
-                <Text className="text-base font-semibold text-off-white">
+                <Text className="text-ivory text-base">Total Value:</Text>
+                <Text className="text-ivory text-base font-semibold">
                   {totalAssetData.totalAsset.currency} ${Number(totalAssetData.totalAsset.totalValue).toFixed(2)}
                 </Text>
               </View>
               <View className="mt-1 flex-row justify-between">
-                <Text className="text-base text-off-white">Number of Equity:</Text>
-                <Text className="text-base font-semibold text-off-white">{totalAssetData.totalAsset.transactionCount}</Text>
+                <Text className="text-ivory text-base">Number of Equity:</Text>
+                <Text className="text-ivory text-base font-semibold">{totalAssetData.totalAsset.transactionCount}</Text>
               </View>
               <View className="mt-1 flex-row justify-between">
-                <Text className="text-base text-off-white">Total P&L:</Text>
+                <Text className="text-ivory text-base">Total P&L:</Text>
                 <Text className={`text-base font-semibold ${totalAssetData.totalAsset.totalPnl >= 0 ? "text-green-500" : "text-red-600"}`}>
                   {totalAssetData.totalAsset.totalPnl >= 0 ? "+" : ""}
                   {totalAssetData.totalAsset.currency} ${Number(totalAssetData.totalAsset.totalPnl).toFixed(2)}
                 </Text>
               </View>
               <View className="mt-1 flex-row justify-between">
-                <Text className="text-base text-off-white">Realized P&L:</Text>
+                <Text className="text-ivory text-base">Realized P&L:</Text>
                 <Text className={`text-base font-semibold ${totalAssetData.totalAsset.totalRealizedPnl >= 0 ? "text-green-500" : "text-red-600"}`}>
                   {totalAssetData.totalAsset.totalRealizedPnl >= 0 ? "+" : ""}
                   {totalAssetData.totalAsset.currency} ${Number(totalAssetData.totalAsset.totalRealizedPnl).toFixed(2)}
                 </Text>
               </View>
               <View className="mt-1 flex-row justify-between">
-                <Text className="text-base text-off-white">Unrealized P&L:</Text>
+                <Text className="text-ivory text-base">Unrealized P&L:</Text>
                 <Text className={`text-base font-semibold ${totalAssetData.totalAsset.totalUnrealizedPnl >= 0 ? "text-green-500" : "text-red-600"}`}>
                   {totalAssetData.totalAsset.totalUnrealizedPnl >= 0 ? "+" : ""}
                   {totalAssetData.totalAsset.currency} ${Number(totalAssetData.totalAsset.totalUnrealizedPnl).toFixed(2)}

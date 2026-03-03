@@ -11,7 +11,7 @@ export default function TabLayout() {
     <Tabs
       tabBar={({ state, descriptors, navigation }) => (
         <View className="absolute bottom-8 left-0 right-0 items-center">
-          <View className="h-[60px] w-[200px] flex-row items-center justify-evenly rounded-full bg-pale-brown shadow-lg">
+          <View className="bg-charcoal h-[60px] w-[200px] flex-row items-center justify-evenly rounded-full shadow-lg">
             {state.routes.map((route, index) => {
               const { options } = descriptors[route.key];
               const isFocused = state.index === index;
@@ -54,7 +54,7 @@ export default function TabLayout() {
         options={{
           title: "Home",
           tabBarIcon: ({ color, focused }) => (
-            <View className={classNames("h-12 w-14 items-center justify-center rounded-full", { "bg-pale-green": focused })}>
+            <View className={classNames("h-12 w-14 items-center justify-center rounded-full", { "bg-muted": focused })}>
               <Home color={focused ? "white" : "white"} size={24} />
             </View>
           ),
@@ -65,7 +65,7 @@ export default function TabLayout() {
         options={{
           title: "Transaction",
           tabBarIcon: ({ color, focused }) => (
-            <View className={classNames("h-12 w-12 items-center justify-center rounded-full", { "bg-pale-green": focused })}>
+            <View className={classNames("h-12 w-12 items-center justify-center rounded-full", { "bg-muted": focused })}>
               <Compass color={focused ? "white" : "white"} size={24} />
             </View>
           ),
@@ -76,7 +76,7 @@ export default function TabLayout() {
         options={{
           title: "Daily Expense",
           tabBarIcon: ({ color, focused }) => (
-            <View className={classNames("h-12 w-12 items-center justify-center rounded-full", { "bg-pale-green": focused })}>
+            <View className={classNames("h-12 w-12 items-center justify-center rounded-full", { "bg-muted": focused })}>
               <Wallet color={focused ? "white" : "white"} size={24} />
             </View>
           ),

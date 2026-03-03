@@ -5,33 +5,33 @@
 
 import { Platform } from "react-native";
 
-// Tailwind palette
-const paleGreen = "#A8BBA3";
-const offWhite = "#F7F4EA";
-const pinkWhite = "#EBD9D1";
-const paleBrown = "#B87C4C";
+// Tailwind palette - minimalist
+const ivory = "#FAFAF8";
+const stone = "#E7E5E0";
+const muted = "#9A9A98";
+const charcoal = "#2D2D2D";
 
-const tintColorLight = paleGreen;
-const tintColorDark = offWhite;
+const tintColorLight = muted;
+const tintColorDark = ivory;
 
 export const Colors = {
   light: {
-    text: paleBrown, // brown for text
-    background: offWhite, // off-white background
-    tint: paleGreen, // main accent
-    icon: paleBrown,
-    tabIconDefault: paleBrown,
-    tabIconSelected: paleGreen,
-    highlight: pinkWhite,
+    text: charcoal, // dark text
+    background: ivory, // ivory background
+    tint: muted, // main accent
+    icon: charcoal,
+    tabIconDefault: charcoal,
+    tabIconSelected: muted,
+    highlight: stone,
   },
   dark: {
-    text: offWhite,
-    background: paleBrown, // brown background for dark
-    tint: paleGreen,
-    icon: offWhite,
-    tabIconDefault: offWhite,
-    tabIconSelected: paleGreen,
-    highlight: pinkWhite,
+    text: ivory,
+    background: charcoal, // charcoal background for dark
+    tint: muted,
+    icon: ivory,
+    tabIconDefault: ivory,
+    tabIconSelected: muted,
+    highlight: stone,
   },
 };
 
@@ -55,8 +55,7 @@ export const Fonts = Platform.select({
   web: {
     sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
     serif: "Georgia, 'Times New Roman', serif",
-    rounded:
-      "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
+    rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
     mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
   },
 });
